@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class PlayerMovement : MonoBehaviour
+public class BusMovement : MonoBehaviour
 {
     [SerializeField]
     private float _accelerationRate = 1.0f;
@@ -72,10 +72,15 @@ public class PlayerMovement : MonoBehaviour
             turnAmount = -1;
         }
 
+        // Вычисляем скорость поворота на основе текущей скорости
+        float currentSpeed = _rigidbody2D.velocity.magnitude;
+        float speedPercentage = currentSpeed / _maxSpeed;
+        float currentTurnSpeed = _turnSpeed * speedPercentage;
+
         // Применяем поворот
-        transform.Rotate(0, 0, turnAmount * _turnSpeed * Time.deltaTime);
+        transform.Rotate(0, 0, turnAmount * currentTurnSpeed * Time.deltaTime);
 
         // Обновляем направление движения согласно новому углу поворота
-        _rigidbody2D.velocity = transform.up * _rigidbody2D.velocity.magnitude;
+        _rigidbody2D.velocity = transform.up * currentSpeed;
     }
 }

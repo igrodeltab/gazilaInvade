@@ -420,9 +420,9 @@ GameObject:
   - component: {fileID: 2080800778}
   - component: {fileID: 2080800777}
   - component: {fileID: 2080800780}
-  - component: {fileID: 2080800779}
+  - component: {fileID: 2080800781}
   m_Layer: 0
-  m_Name: Player
+  m_Name: Bus
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -497,22 +497,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2080800779
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2080800776}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6bab7a756cf010d428b185b9eeab5d18, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _accelerationRate: 1
-  _decelerationRate: 4
-  _maxSpeed: 4
-  _turnSpeed: 100
 --- !u!50 &2080800780
 Rigidbody2D:
   serializedVersion: 4
@@ -534,3 +518,19 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &2080800781
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2080800776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b81ce3d44cfe2184ba423a37045818b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _accelerationRate: 1
+  _decelerationRate: 4
+  _maxSpeed: 4
+  _turnSpeed: 100
