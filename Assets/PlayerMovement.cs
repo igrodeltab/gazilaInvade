@@ -4,14 +4,16 @@
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField]
-    private float _accelerationRate = 1.0f; // Скорость набора скорости
+    private float _accelerationRate = 1.0f;
     [SerializeField]
-    private float _decelerationRate = 2.0f; // Скорость торможения
+    private float _decelerationRate = 2.0f;
     [SerializeField]
-    private float _maxSpeed = 5.0f;         // Максимальная скорость
+    private float _maxSpeed = 5.0f;
+    [SerializeField]
+    private float _turnSpeed = 200.0f;  // Скорость поворота
 
     private Rigidbody2D _rigidbody2D;
-    private float _targetSpeed = 0;         // Желаемая скорость
+    private float _targetSpeed = 0;
 
     private void Awake()
     {
@@ -22,6 +24,7 @@ public class PlayerMovement : MonoBehaviour
     {
         HandleInput();
         HandleMovement();
+        HandleRotation();
     }
 
     private void HandleInput()
@@ -38,16 +41,41 @@ public class PlayerMovement : MonoBehaviour
 
     private void HandleMovement()
     {
-        if (_rigidbody2D.velocity.y < _targetSpeed)
+        float currentSpeed = _rigidbody2D.velocity.magnitude;
+
+        Vector2 direction = transform.up;  // Направление движения вперед
+
+        if (currentSpeed < _targetSpeed)
         {
-            _rigidbody2D.velocity += new Vector2(0, _accelerationRate * Time.deltaTime);
+            Vector2 acceleration = direction * _accelerationRate * Time.deltaTime;
+            _rigidbody2D.velocity += acceleration;
         }
-        else if (_rigidbody2D.velocity.y > _targetSpeed)
+        else if (currentSpeed > _targetSpeed)
         {
-            _rigidbody2D.velocity -= new Vector2(0, _decelerationRate * Time.deltaTime);
+            Vector2 deceleration = -direction * _decelerationRate * Time.deltaTime;
+            _rigidbody2D.velocity += deceleration;
         }
 
-        // Ограничиваем максимальную скорость
         _rigidbody2D.velocity = Vector2.ClampMagnitude(_rigidbody2D.velocity, _maxSpeed);
+    }
+
+    private void HandleRotation()
+    {
+        float turnAmount = 0;
+
+        if (Input.GetKey(KeyCode.A))
+        {
+            turnAmount = 1;
+        }
+        else if (Input.GetKey(KeyCode.D))
+        {
+            turnAmount = -1;
+        }
+
+        // Применяем поворот
+        transform.Rotate(0, 0, turnAmount * _turnSpeed * Time.deltaTime);
+
+        // Обновляем направление движения согласно новому углу поворота
+        _rigidbody2D.velocity = transform.up * _rigidbody2D.velocity.magnitude;
     }
 }
