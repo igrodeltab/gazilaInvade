@@ -4,7 +4,7 @@ using UnityEngine;
 [RequireComponent(typeof(Collider2D))]
 public class BusPassengerDetection : MonoBehaviour
 {
-    private List<PassengerBehaviour> passengersNearby = new List<PassengerBehaviour>();
+    private List<PassengerMovement> passengersNearby = new List<PassengerMovement>();
 
     private void Update()
     {
@@ -19,7 +19,7 @@ public class BusPassengerDetection : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        PassengerBehaviour passenger = collision.GetComponent<PassengerBehaviour>();
+        PassengerMovement passenger = collision.GetComponent<PassengerMovement>();
         if (passenger)
         {
             passengersNearby.Add(passenger);
@@ -28,7 +28,7 @@ public class BusPassengerDetection : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        PassengerBehaviour passenger = collision.GetComponent<PassengerBehaviour>();
+        PassengerMovement passenger = collision.GetComponent<PassengerMovement>();
         if (passenger)
         {
             passengersNearby.Remove(passenger);
