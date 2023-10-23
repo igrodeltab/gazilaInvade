@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class PassengerBehaviour : MonoBehaviour
+public class PassengerMovement : MonoBehaviour
 {
     [SerializeField]
     private float _moveSpeed = 1f;          // Скорость движения пассажира
