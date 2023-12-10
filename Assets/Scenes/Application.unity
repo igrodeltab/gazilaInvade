@@ -663,7 +663,8 @@ GameObject:
   - component: {fileID: 2080800778}
   - component: {fileID: 2080800777}
   - component: {fileID: 2080800780}
-  - component: {fileID: 2080800781}
+  - component: {fileID: 2080800784}
+  - component: {fileID: 2080800783}
   - component: {fileID: 2080800782}
   m_Layer: 0
   m_Name: Bus
@@ -762,22 +763,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &2080800781
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2080800776}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b81ce3d44cfe2184ba423a37045818b0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _accelerationRate: 1
-  _decelerationRate: 4
-  _maxSpeed: 4
-  _turnSpeed: 100
 --- !u!61 &2080800782
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -804,3 +789,31 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &2080800783
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2080800776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff55976e573a8f74599e5cfeac0ab24e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _accelerationRate: 1
+  _decelerationRate: 4
+  _maxSpeed: 4
+  _turnSpeed: 100
+--- !u!114 &2080800784
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2080800776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5021367cd58e06843b33e2ead40acf90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
