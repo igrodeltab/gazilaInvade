@@ -32,7 +32,7 @@ public class BusMovement : MonoBehaviour
 
     private void HandleInput()
     {
-        if (Input.GetKeyDown(KeyCode.W))
+        if (_inputSystem.VerticalInput > 0)
         {
             if (IsMovingForward() || IsStationary())
             {
@@ -44,7 +44,7 @@ public class BusMovement : MonoBehaviour
                 _isBraking = true;
             }
         }
-        else if (Input.GetKeyDown(KeyCode.S))
+        else if (_inputSystem.VerticalInput < 0)
         {
             if (IsMovingBackward() || IsStationary())
             {
@@ -135,4 +135,17 @@ public class BusMovement : MonoBehaviour
             _rigidbody2D.velocity = transform.up * currentSpeed * Mathf.Sign(_targetSpeed);
         }
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        // Проверить, является ли объект столкновения объектом, который должен влиять на автобус
+        if (collision.collider.CompareTag("SomeTag"))
+        {
+            // Установить скорость в нуль или адаптировать по вашему усмотрению
+            _rigidbody2D.velocity = Vector2.zero;
+            _isBraking = false;
+            _targetSpeed = 0;
+        }
+    }
+
 }

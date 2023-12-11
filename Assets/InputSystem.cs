@@ -10,11 +10,11 @@ public class InputSystem : MonoBehaviour
         VerticalInput = 0;
         HorizontalInput = 0;
 
-        if (Input.GetKey(KeyCode.W))
+        if (Input.GetKeyDown(KeyCode.W))
         {
             VerticalInput = 1;
         }
-        else if (Input.GetKey(KeyCode.S))
+        else if (Input.GetKeyDown(KeyCode.S))
         {
             VerticalInput = -1;
         }
