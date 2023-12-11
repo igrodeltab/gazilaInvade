@@ -138,14 +138,16 @@ public class BusMovement : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        // Проверить, является ли объект столкновения объектом, который должен влиять на автобус
-        if (collision.collider.CompareTag("SomeTag"))
-        {
-            // Установить скорость в нуль или адаптировать по вашему усмотрению
-            _rigidbody2D.velocity = Vector2.zero;
-            _isBraking = false;
-            _targetSpeed = 0;
-        }
-    }
+        // Вычисление относительной скорости столкновения
+        Vector2 relativeVelocity = collision.relativeVelocity;
 
+        // Сброс текущей скорости автобуса
+        _rigidbody2D.velocity = Vector2.zero;
+        _rigidbody2D.angularVelocity = 0;
+        _isBraking = false;
+        _targetSpeed = 0;
+
+        // Применение силы для отталкивания автобуса
+        _rigidbody2D.AddForce(-relativeVelocity * _rigidbody2D.mass, ForceMode2D.Impulse);
+    }
 }
