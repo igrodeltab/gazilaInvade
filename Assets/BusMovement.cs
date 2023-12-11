@@ -15,6 +15,7 @@ public class BusMovement : MonoBehaviour
     private Rigidbody2D _rigidbody2D;
     private InputSystem _inputSystem;
     private float _targetSpeed = 0;
+    private bool _isBraking = false;
 
     private void Awake()
     {
@@ -31,14 +32,45 @@ public class BusMovement : MonoBehaviour
 
     private void HandleInput()
     {
-        if (_inputSystem.VerticalInput > 0)
+        if (Input.GetKeyDown(KeyCode.W))
         {
-            _targetSpeed = _maxSpeed;
+            if (IsMovingForward() || IsStationary())
+            {
+                _targetSpeed = _maxSpeed;
+                _isBraking = false;
+            }
+            else
+            {
+                _isBraking = true;
+            }
         }
-        else if (_inputSystem.VerticalInput < 0)
+        else if (Input.GetKeyDown(KeyCode.S))
         {
-            _targetSpeed = -_maxSpeed; // Изменено для движения назад
+            if (IsMovingBackward() || IsStationary())
+            {
+                _targetSpeed = -_maxSpeed;
+                _isBraking = false;
+            }
+            else
+            {
+                _isBraking = true;
+            }
         }
+    }
+
+    private bool IsMovingForward()
+    {
+        return Vector2.Dot(_rigidbody2D.velocity, transform.up) > 0;
+    }
+
+    private bool IsMovingBackward()
+    {
+        return Vector2.Dot(_rigidbody2D.velocity, transform.up) < 0;
+    }
+
+    private bool IsStationary()
+    {
+        return _rigidbody2D.velocity.magnitude < 0.01f;
     }
 
     private void HandleMovement()
@@ -46,15 +78,31 @@ public class BusMovement : MonoBehaviour
         float currentSpeed = _rigidbody2D.velocity.magnitude;
         Vector2 direction = transform.up;
 
-        if (Mathf.Abs(currentSpeed) < Mathf.Abs(_targetSpeed))
+        if (_isBraking)
         {
-            Vector2 acceleration = direction * _accelerationRate * Time.deltaTime * Mathf.Sign(_targetSpeed);
-            _rigidbody2D.velocity += acceleration;
-        }
-        else if (Mathf.Abs(currentSpeed) > Mathf.Abs(_targetSpeed))
-        {
-            Vector2 deceleration = -direction * _decelerationRate * Time.deltaTime * Mathf.Sign(_targetSpeed);
+            // Торможение
+            Vector2 deceleration = -direction * _decelerationRate * Time.deltaTime;
             _rigidbody2D.velocity += deceleration;
+            if (currentSpeed < 0.01f)
+            {
+                _rigidbody2D.velocity = Vector2.zero;
+                _isBraking = false;
+                _targetSpeed = 0;
+            }
+        }
+        else
+        {
+            // Ускорение или замедление до целевой скорости
+            if (currentSpeed < Mathf.Abs(_targetSpeed))
+            {
+                Vector2 acceleration = direction * _accelerationRate * Time.deltaTime * Mathf.Sign(_targetSpeed);
+                _rigidbody2D.velocity += acceleration;
+            }
+            else if (currentSpeed > Mathf.Abs(_targetSpeed))
+            {
+                Vector2 deceleration = -direction * _decelerationRate * Time.deltaTime * Mathf.Sign(_targetSpeed);
+                _rigidbody2D.velocity += deceleration;
+            }
         }
 
         _rigidbody2D.velocity = Vector2.ClampMagnitude(_rigidbody2D.velocity, _maxSpeed);
