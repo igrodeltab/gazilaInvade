@@ -37,7 +37,7 @@ public class BusMovement : MonoBehaviour
         }
         else if (_inputSystem.VerticalInput < 0)
         {
-            _targetSpeed = 0;
+            _targetSpeed = -_maxSpeed; // Изменено для движения назад
         }
     }
 
@@ -46,14 +46,14 @@ public class BusMovement : MonoBehaviour
         float currentSpeed = _rigidbody2D.velocity.magnitude;
         Vector2 direction = transform.up;
 
-        if (currentSpeed < _targetSpeed)
+        if (Mathf.Abs(currentSpeed) < Mathf.Abs(_targetSpeed))
         {
-            Vector2 acceleration = direction * _accelerationRate * Time.deltaTime;
+            Vector2 acceleration = direction * _accelerationRate * Time.deltaTime * Mathf.Sign(_targetSpeed);
             _rigidbody2D.velocity += acceleration;
         }
-        else if (currentSpeed > _targetSpeed)
+        else if (Mathf.Abs(currentSpeed) > Mathf.Abs(_targetSpeed))
         {
-            Vector2 deceleration = -direction * _decelerationRate * Time.deltaTime;
+            Vector2 deceleration = -direction * _decelerationRate * Time.deltaTime * Mathf.Sign(_targetSpeed);
             _rigidbody2D.velocity += deceleration;
         }
 
@@ -82,7 +82,7 @@ public class BusMovement : MonoBehaviour
         // Обновляем направление движения согласно новому углу поворота
         if (currentSpeed > 0)
         {
-            _rigidbody2D.velocity = transform.up * currentSpeed;
+            _rigidbody2D.velocity = transform.up * currentSpeed * Mathf.Sign(_targetSpeed);
         }
     }
 }
