@@ -76,13 +76,15 @@ public class BusMovement : MonoBehaviour
     private void HandleMovement()
     {
         float currentSpeed = _rigidbody2D.velocity.magnitude;
-        Vector2 direction = transform.up;
+        Vector2 currentDirection = _rigidbody2D.velocity.normalized;
+        Vector2 forwardDirection = transform.up;
 
         if (_isBraking)
         {
-            // Торможение
-            Vector2 deceleration = -direction * _decelerationRate * Time.deltaTime;
+            // Торможение: применяем силу замедления в направлении, противоположном текущему движению
+            Vector2 deceleration = -currentDirection * _decelerationRate * Time.deltaTime;
             _rigidbody2D.velocity += deceleration;
+
             if (currentSpeed < 0.01f)
             {
                 _rigidbody2D.velocity = Vector2.zero;
@@ -95,12 +97,12 @@ public class BusMovement : MonoBehaviour
             // Ускорение или замедление до целевой скорости
             if (currentSpeed < Mathf.Abs(_targetSpeed))
             {
-                Vector2 acceleration = direction * _accelerationRate * Time.deltaTime * Mathf.Sign(_targetSpeed);
+                Vector2 acceleration = forwardDirection * _accelerationRate * Time.deltaTime * Mathf.Sign(_targetSpeed);
                 _rigidbody2D.velocity += acceleration;
             }
             else if (currentSpeed > Mathf.Abs(_targetSpeed))
             {
-                Vector2 deceleration = -direction * _decelerationRate * Time.deltaTime * Mathf.Sign(_targetSpeed);
+                Vector2 deceleration = -forwardDirection * _decelerationRate * Time.deltaTime * Mathf.Sign(_targetSpeed);
                 _rigidbody2D.velocity += deceleration;
             }
         }
