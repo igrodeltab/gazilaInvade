@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - SomeTag
+  - Passenger
   layers:
   - Default
   - TransparentFX

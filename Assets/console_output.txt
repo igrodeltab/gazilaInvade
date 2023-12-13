@@ -1,0 +1,5 @@
+[Error] Tag: Passenger is not defined.
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+BusPickingUpPassangers:OnCollisionEnter2D (UnityEngine.Collision2D) (at Assets/BusPickingUpPassangers.cs:16)
+
+
