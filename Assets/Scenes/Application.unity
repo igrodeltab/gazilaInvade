@@ -1188,6 +1188,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 255e15cd7393196439f1770846573d7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _ticketPrice: 10
+  _totalEarnings: 0
 --- !u!1001 &276039169568926274
 PrefabInstance:
   m_ObjectHideFlags: 0
