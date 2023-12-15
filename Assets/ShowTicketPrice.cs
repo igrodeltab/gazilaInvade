@@ -8,7 +8,6 @@ public class ShowTicketPrice : MonoBehaviour
     [SerializeField] private float moveSpeed = 1.0f; // Speed of movement
 
     private GameObject spawnedObject = null;
-    private bool shouldMove = false;
 
     // Public method to spawn the prefab on the canvas at a specified position
     public void SpawnPrefabOnCanvas(Vector2 position, int textTicketPrice)
@@ -39,18 +38,6 @@ public class ShowTicketPrice : MonoBehaviour
         if (tmp != null)
         {
             tmp.text = textTicketPrice.ToString();
-        }
-
-        // Start moving the object
-        shouldMove = true;
-    }
-
-    void Update()
-    {
-        if (shouldMove && spawnedObject != null)
-        {
-            RectTransform rectTransform = spawnedObject.GetComponent<RectTransform>();
-            rectTransform.anchoredPosition += Vector2.up * moveSpeed * Time.deltaTime;
         }
     }
 }

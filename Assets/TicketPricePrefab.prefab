@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1940416535635830039}
   - component: {fileID: 4739651297201461452}
   - component: {fileID: 5730628839742253803}
+  - component: {fileID: -4013577383454170372}
   m_Layer: 5
   m_Name: TicketPricePrefab
   m_TagString: Untagged
@@ -135,3 +136,16 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &-4013577383454170372
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3463381900810965379}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 679b090d39490224bb240d4e55893fb4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _moveSpeed: 4
