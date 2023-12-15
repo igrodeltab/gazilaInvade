@@ -7,11 +7,13 @@ public class BusPickingUpPassenger : MonoBehaviour
     [ReadOnly] [SerializeField] private int _totalEarnings; // Общая сумма денег, заработанная от пассажиров
     
     private Rigidbody2D _rigidbody2D;
+    private ShowTicketPrice _showTicketPrice; // Ссылка на скрипт ShowTicketPrice
 
     private void Awake()
     {
-        _rigidbody2D = GetComponent<Rigidbody2D>();
         _totalEarnings = 0;
+        _rigidbody2D = GetComponent<Rigidbody2D>();
+        _showTicketPrice = GetComponent<ShowTicketPrice>();
     }
 
     private void OnTriggerEnter2D(Collider2D collider)
@@ -32,6 +34,13 @@ public class BusPickingUpPassenger : MonoBehaviour
     {
         // Добавляем стоимость проезда к общей сумме заработка
         _totalEarnings += _ticketPrice;
+
+        //prefabSpawner.SpawnPrefabOnCanvas(passenger.transform.position);
+
+        if (_showTicketPrice != null)
+        {
+            _showTicketPrice.SpawnPrefabOnCanvas(passenger.transform.position, _ticketPrice);
+        }
 
         // Логика по обработке пассажира, например, удаление объекта или другие действия
         Destroy(passenger);
