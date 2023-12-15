@@ -1372,6 +1372,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefab: {fileID: 3463381900810965379, guid: f895ff6b35affad46856645942ea4993, type: 3}
   canvas: {fileID: 1544917831}
+  moveSpeed: 100
 --- !u!1001 &276039169568926274
 PrefabInstance:
   m_ObjectHideFlags: 0
