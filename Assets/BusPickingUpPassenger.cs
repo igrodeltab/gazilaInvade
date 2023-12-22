@@ -8,6 +8,9 @@ public class BusPickingUpPassenger : MonoBehaviour
     [SerializeField] private int _maxPassengers = 10; // Максимальное количество пассажиров
     [ReadOnly] [SerializeField] private int _currentPassengers = 0; // Текущее количество пассажиров
 
+    public int CurrentPassengers => _currentPassengers; // Только для чтения
+    public int MaxPassengers => _maxPassengers; // Только для чтения
+
     private Rigidbody2D _rigidbody2D;
     private ShowTicketPrice _showTicketPrice;
 
@@ -15,7 +18,7 @@ public class BusPickingUpPassenger : MonoBehaviour
     {
         _totalEarnings = 0;
         _currentPassengers = 0;
-        PassengerCounter.Instance?.UpdatePassengerCount(_currentPassengers, _maxPassengers);
+        PassengerCounter.Instance?.UpdatePassengerCount(CurrentPassengers, MaxPassengers);
 
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _showTicketPrice = GetComponent<ShowTicketPrice>();
@@ -35,7 +38,7 @@ public class BusPickingUpPassenger : MonoBehaviour
         {
             _totalEarnings += _ticketPrice;
             _currentPassengers++;
-            PassengerCounter.Instance?.UpdatePassengerCount(_currentPassengers, _maxPassengers);
+            PassengerCounter.Instance?.UpdatePassengerCount(CurrentPassengers, MaxPassengers);
 
             if (_showTicketPrice != null)
             {
