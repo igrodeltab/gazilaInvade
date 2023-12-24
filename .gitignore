@@ -72,5 +72,4 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
 # console output txt
-git rm --cached Assets/console_output.txt
 Assets/console_output.txt
