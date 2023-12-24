@@ -73,3 +73,4 @@ crashlytics-build.properties
 
 # console output txt
 git rm --cached Assets/console_output.txt
+Assets/console_output.txt
