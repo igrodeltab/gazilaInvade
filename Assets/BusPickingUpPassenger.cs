@@ -19,6 +19,7 @@ public class BusPickingUpPassenger : MonoBehaviour
         _totalEarnings = 0;
         _currentPassengers = 0;
         PassengerCounter.Instance?.UpdatePassengerCount(CurrentPassengers, MaxPassengers);
+        TotalEarningsCounter.Instance?.UpdateTotalEarningsCount(_totalEarnings);
 
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _showTicketPrice = GetComponent<ShowTicketPrice>();
@@ -39,6 +40,7 @@ public class BusPickingUpPassenger : MonoBehaviour
             _totalEarnings += _ticketPrice;
             _currentPassengers++;
             PassengerCounter.Instance?.UpdatePassengerCount(CurrentPassengers, MaxPassengers);
+            TotalEarningsCounter.Instance?.UpdateTotalEarningsCount(_totalEarnings);
 
             if (_showTicketPrice != null)
             {
