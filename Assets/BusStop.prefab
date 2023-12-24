@@ -46,8 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbd59518165c1ef4b8cf0e1ff9b3f6e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  passengerPrefab: {fileID: 276039170975640416, guid: bc54ee135f3a6b246996928afb69d7ea, type: 3}
-  spawnPoint: {fileID: 0}
+  _passengerPrefab: {fileID: 276039170975640416, guid: bc54ee135f3a6b246996928afb69d7ea, type: 3}
 --- !u!212 &8082740170829745898
 SpriteRenderer:
   m_ObjectHideFlags: 0
