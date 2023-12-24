@@ -7,7 +7,9 @@ public class BusPickingUpPassenger : MonoBehaviour
     [ReadOnly] [SerializeField] private int _totalEarnings;
     [SerializeField] private int _maxPassengers = 10; // Максимальное количество пассажиров
     [ReadOnly] [SerializeField] private int _currentPassengers = 0; // Текущее количество пассажиров
+    [SerializeField] private Transform _dropOffPassengerPoint; // Приватное поле для ссылки на точку высадки
 
+    public Transform DropOffPassengerPoint => _dropOffPassengerPoint; // Публичное свойство только для чтения
     public int CurrentPassengers => _currentPassengers; // Только для чтения
     public int MaxPassengers => _maxPassengers; // Только для чтения
 
@@ -48,6 +50,15 @@ public class BusPickingUpPassenger : MonoBehaviour
             }
 
             Destroy(passenger);
+        }
+    }
+
+    public void RemovePassenger()
+    {
+        if (_currentPassengers > 0)
+        {
+            _currentPassengers--;
+            PassengerCounter.Instance?.UpdatePassengerCount(_currentPassengers, _maxPassengers);
         }
     }
 }
