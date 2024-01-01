@@ -1,20 +1,20 @@
 ﻿using UnityEngine;
-using System.Collections.Generic; // Необходимо для использования List
+using System.Collections.Generic;
 
 public class BusStop : MonoBehaviour
 {
-    [SerializeField] private GameObject _passengerPrefab; // Префаб пассажира
-    private const float _minVelocityToUnload = 0.01f; // Минимальная скорость для высадки пассажиров
+    [SerializeField] private GameObject _passengerPrefab;
+    private const float _minVelocityToUnload = 0.01f;
     private BusPickingUpPassenger _bus;
     private Rigidbody2D _busRigidbody;
-    private bool _passengersUnloaded = false; // Флаг, отслеживающий высадку пассажиров
-    private List<PassengerMovement> _droppedOffPassengers = new List<PassengerMovement>(); // Список высаженных пассажиров
+    private bool _passengersUnloaded = false;
+    private List<PassengerMovement> _droppedOffPassengers = new List<PassengerMovement>();
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
         _bus = collider.GetComponent<BusPickingUpPassenger>();
         _busRigidbody = collider.GetComponent<Rigidbody2D>();
-        _passengersUnloaded = false; // Сбросить флаг при входе автобуса в остановку
+        _passengersUnloaded = false;
     }
 
     private void OnTriggerStay2D(Collider2D collider)
@@ -24,7 +24,7 @@ public class BusStop : MonoBehaviour
             if (_busRigidbody.velocity.magnitude < _minVelocityToUnload)
             {
                 UnloadPassengers(_bus, _bus.DropOffPassengerPoint);
-                _passengersUnloaded = true; // Установить флаг, чтобы избежать повторной высадки
+                _passengersUnloaded = true;
             }
         }
     }
@@ -35,32 +35,28 @@ public class BusStop : MonoBehaviour
         {
             _bus = null;
             _busRigidbody = null;
-            _passengersUnloaded = false; // Сбросить флаг при выходе автобуса из остановки
+            _passengersUnloaded = false;
         }
     }
 
     private void UnloadPassengers(BusPickingUpPassenger bus, Transform dropOffPoint)
     {
-        // Убедитесь, что есть пассажиры для высадки
         if (bus.CurrentPassengers > 0)
         {
-            // Определение количества пассажиров для высадки
             int passengersToUnload = Random.Range(1, bus.CurrentPassengers + 1);
 
             for (int i = 0; i < passengersToUnload; i++)
             {
-                // Создание экземпляра префаба пассажира
                 GameObject passengerObj = Instantiate(_passengerPrefab, dropOffPoint.position, Quaternion.identity);
                 PassengerMovement passenger = passengerObj.GetComponent<PassengerMovement>();
 
-                // Настройка состояния пассажира как "не готов сесть в автобус"
                 if (passenger != null)
                 {
-                    passenger.SetAsDroppedOff();
-                    _droppedOffPassengers.Add(passenger); // Если используется список для отслеживания высаженных пассажиров
+                    Vector2 moveAwayDirection = (passenger.transform.position - bus.transform.position).normalized;
+                    passenger.SetAsDroppedOff(moveAwayDirection);
+                    _droppedOffPassengers.Add(passenger);
                 }
 
-                // Уменьшение числа пассажиров в автобусе
                 bus.RemovePassenger();
             }
         }
