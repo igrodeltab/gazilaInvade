@@ -2,13 +2,37 @@
 
 public class PassengerMovement : MonoBehaviour
 {
-    [SerializeField]
-    private float _moveSpeed = 1f;          // Скорость движения пассажира
+    [SerializeField] private float _moveSpeed = 1f; // Скорость движения пассажира
+    [SerializeField] private float _waitTimeAfterDropOff = 5f; // Время ожидания перед тем, как снова подойти к автобусу
+
+    private float _waitTimer;
+    private bool _isReadyToBoard = true; // Состояние готовности сесть в автобус
+
+    private void Update()
+    {
+        if (!_isReadyToBoard)
+        {
+            _waitTimer -= Time.deltaTime;
+            if (_waitTimer <= 0f)
+            {
+                _isReadyToBoard = true; // Пассажир готов снова садиться в автобус
+            }
+        }
+    }
 
     public void MoveTowards(Transform targetTransform)
     {
-        // Двигаемся к автобусу
-        Vector2 direction = (targetTransform.position - transform.position).normalized;
-        transform.position += (Vector3)direction * _moveSpeed * Time.deltaTime;
+        if (_isReadyToBoard)
+        {
+            // Двигаемся к автобусу
+            Vector2 direction = (targetTransform.position - transform.position).normalized;
+            transform.position += (Vector3)direction * _moveSpeed * Time.deltaTime;
+        }
+    }
+
+    public void SetAsDroppedOff()
+    {
+        _isReadyToBoard = false;
+        _waitTimer = _waitTimeAfterDropOff;
     }
 }

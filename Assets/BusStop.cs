@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic; // Необходимо для использования List
 
 public class BusStop : MonoBehaviour
 {
@@ -7,6 +8,7 @@ public class BusStop : MonoBehaviour
     private BusPickingUpPassenger _bus;
     private Rigidbody2D _busRigidbody;
     private bool _passengersUnloaded = false; // Флаг, отслеживающий высадку пассажиров
+    private List<PassengerMovement> _droppedOffPassengers = new List<PassengerMovement>(); // Список высаженных пассажиров
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
@@ -39,11 +41,28 @@ public class BusStop : MonoBehaviour
 
     private void UnloadPassengers(BusPickingUpPassenger bus, Transform dropOffPoint)
     {
-        int passengersToUnload = Random.Range(0, bus.CurrentPassengers + 1);
-        for (int i = 0; i < passengersToUnload; i++)
+        // Убедитесь, что есть пассажиры для высадки
+        if (bus.CurrentPassengers > 0)
         {
-            Instantiate(_passengerPrefab, dropOffPoint.position, Quaternion.identity);
-            bus.RemovePassenger();
+            // Определение количества пассажиров для высадки
+            int passengersToUnload = Random.Range(1, bus.CurrentPassengers + 1);
+
+            for (int i = 0; i < passengersToUnload; i++)
+            {
+                // Создание экземпляра префаба пассажира
+                GameObject passengerObj = Instantiate(_passengerPrefab, dropOffPoint.position, Quaternion.identity);
+                PassengerMovement passenger = passengerObj.GetComponent<PassengerMovement>();
+
+                // Настройка состояния пассажира как "не готов сесть в автобус"
+                if (passenger != null)
+                {
+                    passenger.SetAsDroppedOff();
+                    _droppedOffPassengers.Add(passenger); // Если используется список для отслеживания высаженных пассажиров
+                }
+
+                // Уменьшение числа пассажиров в автобусе
+                bus.RemovePassenger();
+            }
         }
     }
 }
