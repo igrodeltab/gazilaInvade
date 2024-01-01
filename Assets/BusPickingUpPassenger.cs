@@ -31,7 +31,11 @@ public class BusPickingUpPassenger : MonoBehaviour
     {
         if (collider.CompareTag("Passenger") && _rigidbody2D.velocity.magnitude < 0.01f)
         {
-            PickUpPassenger(collider.gameObject);
+            PassengerMovement passengerMovement = collider.GetComponent<PassengerMovement>();
+            if (passengerMovement != null && passengerMovement.IsReadyToBoard)
+            {
+                PickUpPassenger(collider.gameObject);
+            }
         }
     }
 

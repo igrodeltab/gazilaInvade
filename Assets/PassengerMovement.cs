@@ -7,6 +7,7 @@ public class PassengerMovement : MonoBehaviour
 
     private float _waitTimer;
     private bool _isReadyToBoard = true; // Состояние готовности сесть в автобус
+    public bool IsReadyToBoard => _isReadyToBoard; // Публичный геттер для _isReadyToBoard
 
     private void Update()
     {

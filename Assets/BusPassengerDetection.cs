@@ -18,7 +18,10 @@ public class BusPassengerDetection : MonoBehaviour
         {
             foreach (var passenger in _passengersNearby)
             {
-                passenger.MoveTowards(this.transform);
+                if (passenger.IsReadyToBoard) // Проверка, готов ли пассажир к посадке
+                {
+                    passenger.MoveTowards(this.transform);
+                }
             }
         }
     }
