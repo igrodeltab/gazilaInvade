@@ -2,14 +2,15 @@
 
 public class PassengerMovement : MonoBehaviour
 {
-    [SerializeField] private float _moveSpeed = 1f; // Скорость движения пассажира
-    [SerializeField] private float _waitTimeAfterDropOff = 5f; // Время ожидания перед тем, как снова подойти к автобусу
+    [SerializeField] private float _moveSpeed = 1f;
+    [SerializeField] private float _waitTimeAfterDropOff = 5f;
+    [SerializeField] private float _angleRange = 30f; // Диапазон угла разброса в градусах
 
-    private float _waitTimer; // Таймер для отслеживания времени ожидания
-    private bool _isReadyToBoard = true; // Флаг, показывающий, готов ли пассажир сесть в автобус
-    private Vector2 _moveAwayDirection; // Направление для движения после высадки
+    private float _waitTimer;
+    private bool _isReadyToBoard = true;
+    private Vector2 _moveAwayDirection;
 
-    public bool IsReadyToBoard => _isReadyToBoard; // Публичный геттер для _isReadyToBoard
+    public bool IsReadyToBoard => _isReadyToBoard;
 
     private void Update()
     {
@@ -28,7 +29,6 @@ public class PassengerMovement : MonoBehaviour
     {
         if (_isReadyToBoard)
         {
-            // Двигаемся к цели (автобусу)
             Vector2 direction = (targetTransform.position - transform.position).normalized;
             transform.position += (Vector3)direction * _moveSpeed * Time.deltaTime;
         }
@@ -43,6 +43,9 @@ public class PassengerMovement : MonoBehaviour
     {
         _isReadyToBoard = false;
         _waitTimer = _waitTimeAfterDropOff;
-        _moveAwayDirection = moveAwayDirection;
+
+        float randomAngle = Random.Range(-_angleRange / 2, _angleRange / 2);
+        Vector2 rotatedDirection = Quaternion.Euler(0, 0, randomAngle) * moveAwayDirection;
+        _moveAwayDirection = rotatedDirection.normalized;
     }
 }

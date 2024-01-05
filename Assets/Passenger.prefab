@@ -127,6 +127,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _moveSpeed: 1
   _waitTimeAfterDropOff: 2
+  _angleRange: 90
 --- !u!114 &276039170975640421
 MonoBehaviour:
   m_ObjectHideFlags: 0
