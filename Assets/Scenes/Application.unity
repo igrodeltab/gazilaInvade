@@ -832,7 +832,10 @@ MonoBehaviour:
   _busTransform: {fileID: 2080800778}
   _frontPointTransform: {fileID: 858486773}
   _backPointTransform: {fileID: 973013249}
-  _transitionSpeed: 0.8
+  _centerToFrontSpeed: 1
+  _frontToCenterSpeed: 1
+  _centerToBackSpeed: 1
+  _backToCenterSpeed: 1
 --- !u!1001 &656064955
 PrefabInstance:
   m_ObjectHideFlags: 0
