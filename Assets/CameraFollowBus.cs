@@ -9,6 +9,8 @@ public class CameraFollowBus : MonoBehaviour
     [SerializeField] private float _frontToCenterSpeed = 1f; // Скорость перехода от переда к центру
     [SerializeField] private float _centerToBackSpeed = 1f; // Скорость перехода от центра к заду
     [SerializeField] private float _backToCenterSpeed = 1f; // Скорость перехода от зада к центру
+    [SerializeField] private float _accelerationFactor = 1f; // Фактор ускорения камеры
+    [SerializeField] private float _maxAcceleration = 10f; // Максимальное ускорение автобуса
 
     private Rigidbody2D _busRigidbody;
     private Transform _currentTarget;
@@ -20,7 +22,7 @@ public class CameraFollowBus : MonoBehaviour
         _currentTarget = _busTransform;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         Transform newTarget = DetermineTargetTransform();
         if (_currentTarget != newTarget)
@@ -30,7 +32,13 @@ public class CameraFollowBus : MonoBehaviour
         }
 
         Vector3 targetPosition = new Vector3(_currentTarget.position.x, _currentTarget.position.y, transform.position.z);
-        transform.position = Vector3.Lerp(transform.position, targetPosition, _currentTransitionSpeed * Time.deltaTime);
+        float cameraSpeed = _currentTransitionSpeed;
+
+        // Учитываем ускорение автобуса
+        float acceleration = Mathf.Clamp(_busRigidbody.velocity.magnitude, 0f, _maxAcceleration) * _accelerationFactor;
+        cameraSpeed += acceleration;
+
+        transform.position = Vector3.Lerp(transform.position, targetPosition, cameraSpeed * Time.fixedDeltaTime);
     }
 
     private Transform DetermineTargetTransform()

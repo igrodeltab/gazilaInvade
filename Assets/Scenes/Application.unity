@@ -836,6 +836,8 @@ MonoBehaviour:
   _frontToCenterSpeed: 1
   _centerToBackSpeed: 1
   _backToCenterSpeed: 1
+  _accelerationFactor: 1
+  _maxAcceleration: 10
 --- !u!1001 &656064955
 PrefabInstance:
   m_ObjectHideFlags: 0
