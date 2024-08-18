@@ -5,56 +5,45 @@ public class RotateObject : MonoBehaviour
     [SerializeField] private float _rotationStep = 10f; // Шаг поворота в градусах
     [SerializeField] private float _rotationDelay = 0.5f; // Задержка перед началом непрерывного поворота при удержании
     [SerializeField] private float _continuousRotationInterval = 0.1f; // Интервал между поворотами при удержании
+    [SerializeField] private float _rotationSpeed = 1f; // Множитель скорости поворота
 
     private float _rotationTimer;
+    private bool _isHoldingKey = false; // Флаг для удержания клавиши
 
     private void Update()
     {
-        HandleRotation();
+        HandleRotation(KeyCode.A, _rotationStep);
+        HandleRotation(KeyCode.D, -_rotationStep);
     }
 
-    private void HandleRotation()
+    private void HandleRotation(KeyCode key, float step)
     {
-        // Если нажата клавиша A
-        if (Input.GetKeyDown(KeyCode.A))
+        if (Input.GetKeyDown(key))
         {
-            RotateObjectByStep(_rotationStep); // Поворот на шаг
-            _rotationTimer = _rotationDelay; // Устанавливаем таймер на задержку перед удержанием
+            RotateObjectByStep(step);
+            _rotationTimer = _rotationDelay; // Начинаем отсчёт задержки для удержания
+            _isHoldingKey = true; // Устанавливаем флаг удержания
         }
 
-        // Если нажата клавиша D
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            RotateObjectByStep(-_rotationStep); // Поворот на шаг
-            _rotationTimer = _rotationDelay; // Устанавливаем таймер на задержку перед удержанием
-        }
-
-        // Если удерживается клавиша A
-        if (Input.GetKey(KeyCode.A))
+        if (Input.GetKey(key))
         {
             _rotationTimer -= Time.deltaTime;
-            if (_rotationTimer <= 0)
+
+            if (_rotationTimer <= 0 && _isHoldingKey)
             {
-                RotateObjectByStep(_rotationStep); // Поворот на шаг
-                _rotationTimer = _continuousRotationInterval; // Устанавливаем таймер на интервал
+                RotateObjectByStep(step * _rotationSpeed); // Непрерывный поворот
+                _rotationTimer = _continuousRotationInterval; // Интервал между поворотами
             }
         }
 
-        // Если удерживается клавиша D
-        if (Input.GetKey(KeyCode.D))
+        if (Input.GetKeyUp(key))
         {
-            _rotationTimer -= Time.deltaTime;
-            if (_rotationTimer <= 0)
-            {
-                RotateObjectByStep(-_rotationStep); // Поворот на шаг
-                _rotationTimer = _continuousRotationInterval; // Устанавливаем таймер на интервал
-            }
+            _isHoldingKey = false; // Сбрасываем флаг удержания
         }
     }
 
     private void RotateObjectByStep(float step)
     {
-        // Поворачиваем объект
         transform.Rotate(0, 0, step);
     }
 }
