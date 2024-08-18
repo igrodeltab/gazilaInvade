@@ -5,6 +5,7 @@ public class CameraFollowBus : MonoBehaviour
     [SerializeField] private Transform _busTransform; // Ссылка на трансформ автобуса
     [SerializeField] private Transform _frontPointTransform; // Точка перед автобусом
     [SerializeField] private Transform _backPointTransform; // Точка сзади автобуса
+
     [SerializeField] private float _centerToFrontSpeed = 1f; // Скорость перехода от центра к переду
     [SerializeField] private float _frontToCenterSpeed = 1f; // Скорость перехода от переда к центру
     [SerializeField] private float _centerToBackSpeed = 1f; // Скорость перехода от центра к заду
@@ -12,14 +13,23 @@ public class CameraFollowBus : MonoBehaviour
     [SerializeField] private float _accelerationFactor = 1f; // Фактор ускорения камеры
     [SerializeField] private float _maxAcceleration = 10f; // Максимальное ускорение автобуса
 
+    [SerializeField] private Transform _topLeftBoundary;  // Верхний левый угол уровня
+    [SerializeField] private Transform _bottomRightBoundary;  // Нижний правый угол уровня
+
     private Rigidbody2D _busRigidbody;
     private Transform _currentTarget;
     private float _currentTransitionSpeed;
+    private float _cameraHalfHeight;
+    private float _cameraHalfWidth;
 
     private void Start()
     {
         _busRigidbody = _busTransform.GetComponent<Rigidbody2D>();
         _currentTarget = _busTransform;
+
+        // Рассчитываем половину высоты и ширины камеры
+        _cameraHalfHeight = Camera.main.orthographicSize;
+        _cameraHalfWidth = _cameraHalfHeight * Camera.main.aspect;
 
         SetStartCameraPosition();
     }
@@ -32,6 +42,15 @@ public class CameraFollowBus : MonoBehaviour
     private void SetStartCameraPosition()
     {
         Vector3 targetPosition = new Vector3(_currentTarget.position.x, _currentTarget.position.y, transform.position.z);
+
+        // Ограничиваем стартовую позицию камеры границами уровня с учетом её размеров
+        targetPosition.x = Mathf.Clamp(targetPosition.x,
+                                       _topLeftBoundary.position.x + _cameraHalfWidth,
+                                       _bottomRightBoundary.position.x - _cameraHalfWidth);
+        targetPosition.y = Mathf.Clamp(targetPosition.y,
+                                       _bottomRightBoundary.position.y + _cameraHalfHeight,
+                                       _topLeftBoundary.position.y - _cameraHalfHeight);
+
         transform.position = targetPosition;
     }
 
@@ -50,6 +69,14 @@ public class CameraFollowBus : MonoBehaviour
         // Учитываем ускорение автобуса
         float acceleration = Mathf.Clamp(_busRigidbody.velocity.magnitude, 0f, _maxAcceleration) * _accelerationFactor;
         cameraSpeed += acceleration;
+
+        // Ограничиваем движение камеры границами уровня с учетом её размеров
+        targetPosition.x = Mathf.Clamp(targetPosition.x,
+                                       _topLeftBoundary.position.x + _cameraHalfWidth,
+                                       _bottomRightBoundary.position.x - _cameraHalfWidth);
+        targetPosition.y = Mathf.Clamp(targetPosition.y,
+                                       _bottomRightBoundary.position.y + _cameraHalfHeight,
+                                       _topLeftBoundary.position.y - _cameraHalfHeight);
 
         transform.position = Vector3.Lerp(transform.position, targetPosition, cameraSpeed * Time.fixedDeltaTime);
     }
