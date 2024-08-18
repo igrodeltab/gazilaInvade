@@ -20,9 +20,22 @@ public class CameraFollowBus : MonoBehaviour
     {
         _busRigidbody = _busTransform.GetComponent<Rigidbody2D>();
         _currentTarget = _busTransform;
+
+        SetStartCameraPosition();
     }
 
     private void FixedUpdate()
+    {
+        UpdateCameraPosition();
+    }
+
+    private void SetStartCameraPosition()
+    {
+        Vector3 targetPosition = new Vector3(_currentTarget.position.x, _currentTarget.position.y, transform.position.z);
+        transform.position = targetPosition;
+    }
+
+    private void UpdateCameraPosition()
     {
         Transform newTarget = DetermineTargetTransform();
         if (_currentTarget != newTarget)
