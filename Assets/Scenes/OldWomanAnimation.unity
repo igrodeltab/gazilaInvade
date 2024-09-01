@@ -354,7 +354,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 918078f15ba7d8340a9f119ea266e935, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 1.25
+  _movementSpeed: 5
+  _clickMarkerPrefab: {fileID: 1707187845355851792, guid: 7c8fd59e6e27f7f46862696c0d0a6d07, type: 3}
 --- !u!1 &1152723790
 GameObject:
   m_ObjectHideFlags: 0
