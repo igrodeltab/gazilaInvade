@@ -2,11 +2,22 @@
 
 public class MovementToTargetByAxis : MonoBehaviour
 {
+    public enum MovementState
+    {
+        Idle,       // Стоим на месте
+        MovingRight,// Двигаемся вправо
+        MovingLeft, // Двигаемся влево
+        MovingUp,   // Двигаемся вверх
+        MovingDown  // Двигаемся вниз
+    }
+
     [SerializeField] private float _movementSpeed = 5f; // Скорость перемещения, настраиваемая в инспекторе
 
     private Vector3 _targetPosition;
     private bool _hasTarget = false;
     private bool _movingAlongX = true;
+
+    public MovementState CurrentState { get; private set; } = MovementState.Idle;
 
     void Update()
     {
@@ -28,6 +39,20 @@ public class MovementToTargetByAxis : MonoBehaviour
         {
             MoveTowardsTarget();
         }
+        else
+        {
+            CurrentState = MovementState.Idle; // Если нет цели, стоим на месте
+        }
+
+        // Дополнительная проверка для случаев, когда объект может остановиться раньше
+        if (!_hasTarget)
+        {
+            if (Mathf.Abs(transform.position.x - _targetPosition.x) > 0.01f || Mathf.Abs(transform.position.y - _targetPosition.y) > 0.01f)
+            {
+                _hasTarget = true;
+                _movingAlongX = Mathf.Abs(_targetPosition.x - transform.position.x) > Mathf.Abs(_targetPosition.y - transform.position.y);
+            }
+        }
     }
 
     private void MoveTowardsTarget()
@@ -39,6 +64,16 @@ public class MovementToTargetByAxis : MonoBehaviour
         {
             // Двигаемся по оси X с заданной скоростью
             currentPosition.x = Mathf.MoveTowards(currentPosition.x, _targetPosition.x, Time.deltaTime * _movementSpeed);
+
+            // Определяем направление движения по X
+            if (Mathf.Sign(_targetPosition.x - transform.position.x) > 0)
+            {
+                CurrentState = MovementState.MovingRight;
+            }
+            else if (Mathf.Sign(_targetPosition.x - transform.position.x) < 0)
+            {
+                CurrentState = MovementState.MovingLeft;
+            }
 
             // Проверяем, достигли ли мы нужной позиции по X
             if (Mathf.Abs(currentPosition.x - _targetPosition.x) < 0.01f)
@@ -52,6 +87,16 @@ public class MovementToTargetByAxis : MonoBehaviour
             // Двигаемся по оси Y с заданной скоростью
             currentPosition.y = Mathf.MoveTowards(currentPosition.y, _targetPosition.y, Time.deltaTime * _movementSpeed);
 
+            // Определяем направление движения по Y
+            if (Mathf.Sign(_targetPosition.y - transform.position.y) > 0)
+            {
+                CurrentState = MovementState.MovingUp;
+            }
+            else if (Mathf.Sign(_targetPosition.y - transform.position.y) < 0)
+            {
+                CurrentState = MovementState.MovingDown;
+            }
+
             // Проверяем, достигли ли мы нужной позиции по Y
             if (Mathf.Abs(currentPosition.y - _targetPosition.y) < 0.01f)
             {
@@ -61,15 +106,5 @@ public class MovementToTargetByAxis : MonoBehaviour
 
         // Обновляем позицию объекта
         transform.position = currentPosition;
-
-        // Дополнительная проверка для случаев, когда объект может остановиться раньше
-        if (!_hasTarget)
-        {
-            if (Mathf.Abs(transform.position.x - _targetPosition.x) > 0.01f || Mathf.Abs(transform.position.y - _targetPosition.y) > 0.01f)
-            {
-                _hasTarget = true;
-                _movingAlongX = Mathf.Abs(_targetPosition.x - transform.position.x) > Mathf.Abs(_targetPosition.y - transform.position.y);
-            }
-        }
     }
 }

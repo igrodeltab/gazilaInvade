@@ -201,6 +201,7 @@ GameObject:
   m_Component:
   - component: {fileID: 726577523}
   - component: {fileID: 726577522}
+  - component: {fileID: 726577528}
   - component: {fileID: 726577527}
   - component: {fileID: 726577526}
   - component: {fileID: 726577525}
@@ -355,7 +356,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 918078f15ba7d8340a9f119ea266e935, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _movementSpeed: 5
+  _movementSpeed: 1.25
 --- !u!114 &726577527
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -370,6 +371,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _targetPrefab: {fileID: 1707187845355851792, guid: 7c8fd59e6e27f7f46862696c0d0a6d07, type: 3}
   _movingObject: {fileID: 726577526}
+--- !u!114 &726577528
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 726577520}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 771c726e18784004a83e419f4c1e0358, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _animator: {fileID: 726577521}
+  _movementScript: {fileID: 726577526}
 --- !u!1 &1152723790
 GameObject:
   m_ObjectHideFlags: 0
@@ -1062,7 +1077,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &2085048987
 MonoBehaviour:
   m_ObjectHideFlags: 0
