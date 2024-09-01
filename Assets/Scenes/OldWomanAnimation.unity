@@ -201,6 +201,7 @@ GameObject:
   m_Component:
   - component: {fileID: 726577523}
   - component: {fileID: 726577522}
+  - component: {fileID: 726577526}
   - component: {fileID: 726577525}
   - component: {fileID: 726577521}
   - component: {fileID: 726577524}
@@ -333,7 +334,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 726577520}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 96c4b120c2c54824082ac1e44e986911, type: 3}
   m_Name: 
@@ -341,6 +342,19 @@ MonoBehaviour:
   _moveSpeed: 1.25
   _playerRigidbody: {fileID: 726577524}
   _playerAnimator: {fileID: 726577521}
+--- !u!114 &726577526
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 726577520}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 918078f15ba7d8340a9f119ea266e935, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  movementSpeed: 1.25
 --- !u!1 &1152723790
 GameObject:
   m_ObjectHideFlags: 0
@@ -1033,7 +1047,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &2085048987
 MonoBehaviour:
   m_ObjectHideFlags: 0
