@@ -5,12 +5,23 @@ public class PassengerMovement : MonoBehaviour
     [SerializeField] private float _moveSpeed = 1f;
     [SerializeField] private float _waitTimeAfterDropOff = 5f;
     [SerializeField] private float _angleRange = 30f; // Диапазон угла разброса в градусах
+    private MovementToTargetByAxis _movementToTargetScript; // Ссылка на скрипт перемещения
 
     private float _waitTimer;
     private bool _isReadyToBoard = true;
     private Vector2 _moveAwayDirection;
+    private bool _isTargetSet = false; // Добавляем переменную для отслеживания установки цели
 
     public bool IsReadyToBoard => _isReadyToBoard;
+
+    private void Awake()
+    {
+        _movementToTargetScript = GetComponent<MovementToTargetByAxis>();
+        if (_movementToTargetScript == null)
+        {
+            Debug.LogError("MovementToTargetByAxis не найден на объекте PassengerMovement.");
+        }
+    }
 
     private void Update()
     {
@@ -21,16 +32,19 @@ public class PassengerMovement : MonoBehaviour
             if (_waitTimer <= 0f)
             {
                 _isReadyToBoard = true;
+                _isTargetSet = false; // Сбрасываем флаг при готовности к посадке
             }
         }
     }
 
     public void MoveTowards(Transform targetTransform)
     {
-        if (_isReadyToBoard)
+        // Проверяем, была ли уже установлена цель
+        if (_isReadyToBoard && !_isTargetSet)
         {
-            Vector2 direction = (targetTransform.position - transform.position).normalized;
-            transform.position += (Vector3)direction * _moveSpeed * Time.deltaTime;
+            _movementToTargetScript.SetTarget(targetTransform.position);
+            Debug.Log("MoveTowards called, setting target");
+            _isTargetSet = true; // Цель установлена, больше не задаём её
         }
     }
 

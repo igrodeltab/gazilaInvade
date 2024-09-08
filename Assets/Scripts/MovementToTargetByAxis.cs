@@ -46,7 +46,6 @@ public class MovementToTargetByAxis : MonoBehaviour
         }
 
         // Дополнительная проверка для случаев, когда объект может остановиться раньше
-        if (!_hasTarget)
         // Добавляем проверку, что цель была установлена
         if (!_hasTarget && _isTargetSet) // Проверка: цель должна быть установлена
         {

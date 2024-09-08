@@ -13,7 +13,9 @@ GameObject:
   - component: {fileID: 276039170975640417}
   - component: {fileID: 276039170975640420}
   - component: {fileID: 6846036868427018344}
+  - component: {fileID: 2239510429516239931}
   - component: {fileID: 276039170975640421}
+  - component: {fileID: 8554324916913849828}
   m_Layer: 0
   m_Name: Passenger
   m_TagString: Passenger
@@ -77,7 +79,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: 72ecf7a864aed2a45ba035449f608c08, type: 3}
+  m_Sprite: {fileID: 21300000, guid: eac2b03587bf6f94da5ddbdfa7de48d0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -124,7 +126,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.375, y: 0.59375}
+    oldSize: {x: 0.3125, y: 0.59375}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -160,7 +162,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9ddf55628360e347b0e2921fd88a723, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _movementSpeed: 1.25
+  _movementSpeed: 0.5
+--- !u!114 &2239510429516239931
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 276039170975640416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f4b45d7a2b880c49a98ae07e17e894d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _animator: {fileID: 8554324916913849828}
+  _movementScript: {fileID: 6846036868427018344}
 --- !u!114 &276039170975640421
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -174,3 +190,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _passengerData: {fileID: 11400000, guid: e46b96042b4277a4eabac8c56cdebf20, type: 2}
+--- !u!95 &8554324916913849828
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 276039170975640416}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 166428a1c41af8147b5292a811b6b641, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
