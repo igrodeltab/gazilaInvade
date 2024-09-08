@@ -26978,10 +26978,6 @@ PrefabInstance:
       value: Passenger
       objectReference: {fileID: 0}
     - target: {fileID: 276039170975640423, guid: bc54ee135f3a6b246996928afb69d7ea, type: 3}
-      propertyPath: m_RootOrder
-      value: 13
-      objectReference: {fileID: 0}
-    - target: {fileID: 276039170975640423, guid: bc54ee135f3a6b246996928afb69d7ea, type: 3}
       propertyPath: m_LocalPosition.x
       value: 51.73
       objectReference: {fileID: 0}
