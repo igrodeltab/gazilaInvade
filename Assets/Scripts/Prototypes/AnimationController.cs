@@ -3,12 +3,12 @@
 public class AnimatorController : MonoBehaviour
 {
     [SerializeField] private Animator _animator; // Ссылка на компонент Animator
-    [SerializeField] private MovementToTargetByAxis _movementScript; // Ссылка на скрипт движения
+    [SerializeField] private MovementToTargetByAxisDraft _movementScript; // Ссылка на скрипт движения
 
     private void Update()
     {
         // Получаем текущее состояние движения
-        MovementToTargetByAxis.MovementState currentState = _movementScript.CurrentState;
+        MovementToTargetByAxisDraft.MovementState currentState = _movementScript.CurrentState;
 
         // Определяем значения для параметров анимации в зависимости от состояния
         float horizontal = 0f;
@@ -17,31 +17,31 @@ public class AnimatorController : MonoBehaviour
 
         switch (currentState)
         {
-            case MovementToTargetByAxis.MovementState.MovingRight:
+            case MovementToTargetByAxisDraft.MovementState.MovingRight:
                 horizontal = 1f;
                 vertical = 0f;
                 speed = 1f;
                 break;
 
-            case MovementToTargetByAxis.MovementState.MovingLeft:
+            case MovementToTargetByAxisDraft.MovementState.MovingLeft:
                 horizontal = -1f;
                 vertical = 0f;
                 speed = 1f;
                 break;
 
-            case MovementToTargetByAxis.MovementState.MovingUp:
+            case MovementToTargetByAxisDraft.MovementState.MovingUp:
                 horizontal = 0f;
                 vertical = 1f;
                 speed = 1f;
                 break;
 
-            case MovementToTargetByAxis.MovementState.MovingDown:
+            case MovementToTargetByAxisDraft.MovementState.MovingDown:
                 horizontal = 0f;
                 vertical = -1f;
                 speed = 1f;
                 break;
 
-            case MovementToTargetByAxis.MovementState.Idle:
+            case MovementToTargetByAxisDraft.MovementState.Idle:
             default:
                 horizontal = 0f;
                 vertical = 0f;

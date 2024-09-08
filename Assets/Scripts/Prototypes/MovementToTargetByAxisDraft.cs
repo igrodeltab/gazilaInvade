@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class MovementToTargetByAxis : MonoBehaviour
+public class MovementToTargetByAxisDraft : MonoBehaviour
 {
     public enum MovementState
     {

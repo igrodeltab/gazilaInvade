@@ -3,7 +3,7 @@
 public class TargetSpawner : MonoBehaviour
 {
     [SerializeField] private GameObject _targetPrefab; // Префаб цели для спавна
-    [SerializeField] private MovementToTargetByAxis _movingObject; // Ссылка на объект, который движется
+    [SerializeField] private MovementToTargetByAxisDraft _movingObject; // Ссылка на объект, который движется
 
     private GameObject _currentTargetObject;
 
