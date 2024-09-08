@@ -16,25 +16,26 @@ public class MovementToTargetByAxis : MonoBehaviour
     private Vector3 _targetPosition;
     private bool _hasTarget = false;
     private bool _movingAlongX = true;
+    private bool _isTargetSet = false; // Добавляем переменную для отслеживания, установлена ли цель
 
     public MovementState CurrentState { get; private set; } = MovementState.Idle;
 
-    void Update()
+    // Метод для установки целевой позиции
+    public void SetTarget(Vector3 target)
     {
-        // Проверяем нажатие мыши
-        if (Input.GetMouseButtonDown(0))
-        {
-            // Преобразуем позицию клика в мировые координаты
-            Vector3 mousePosition = Input.mousePosition;
-            mousePosition.z = Camera.main.nearClipPlane; // Задаём расстояние от камеры до точки клика
-            _targetPosition = Camera.main.ScreenToWorldPoint(mousePosition);
-            _targetPosition.z = 0; // Убираем глубину, если работаем в 2D
-            _hasTarget = true;
+        _targetPosition = target;
+        _targetPosition.z = 0; // Убираем глубину, если работаем в 2D
+        _hasTarget = true;
+        _isTargetSet = true; // Отмечаем, что цель установлена
 
-            // Определяем, по какой оси будем двигаться сначала
-            _movingAlongX = Mathf.Abs(_targetPosition.x - transform.position.x) > Mathf.Abs(_targetPosition.y - transform.position.y);
-        }
+        // Определяем, по какой оси будем двигаться сначала
+        _movingAlongX = Mathf.Abs(_targetPosition.x - transform.position.x) > Mathf.Abs(_targetPosition.y - transform.position.y);
 
+        Debug.Log($"Target set to: {_targetPosition}");
+    }
+
+    private void Update()
+    {
         if (_hasTarget)
         {
             MoveTowardsTarget();
@@ -46,6 +47,8 @@ public class MovementToTargetByAxis : MonoBehaviour
 
         // Дополнительная проверка для случаев, когда объект может остановиться раньше
         if (!_hasTarget)
+        // Добавляем проверку, что цель была установлена
+        if (!_hasTarget && _isTargetSet) // Проверка: цель должна быть установлена
         {
             if (Mathf.Abs(transform.position.x - _targetPosition.x) > 0.01f || Mathf.Abs(transform.position.y - _targetPosition.y) > 0.01f)
             {
@@ -55,8 +58,12 @@ public class MovementToTargetByAxis : MonoBehaviour
         }
     }
 
+    // Метод для перемещения объекта к цели
     private void MoveTowardsTarget()
     {
+        // Лог для отладки
+        Debug.Log("Moving towards target");
+
         // Получаем текущие координаты объекта
         Vector3 currentPosition = transform.position;
 
