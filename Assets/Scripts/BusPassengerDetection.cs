@@ -6,15 +6,18 @@ public class BusPassengerDetection : MonoBehaviour
 {
     private List<PassengerMovement> _passengersNearby = new List<PassengerMovement>();
     private BusPickingUpPassenger _busPickingUpPassenger; // Ссылка на скрипт управления автобусом
+    private Rigidbody2D _busRigidbody;
 
     private void Awake()
     {
         _busPickingUpPassenger = GetComponentInParent<BusPickingUpPassenger>();
+        _busRigidbody = GetComponentInParent<Rigidbody2D>();
     }
 
     private void Update()
     {
-        if (GetComponentInParent<Rigidbody2D>().velocity.magnitude < 0.1f && HasFreeSeats())
+        // Если автобус остановился и есть свободные места, пассажиры начинают садиться
+        if (_busRigidbody.velocity.magnitude < 0.1f && HasFreeSeats())
         {
             foreach (var passenger in _passengersNearby)
             {
@@ -22,6 +25,15 @@ public class BusPassengerDetection : MonoBehaviour
                 {
                     passenger.MoveTowards(this.transform);
                 }
+            }
+        }
+        // Если автобус начинает движение, сбрасываем цель для всех пассажиров, которые не успели сесть
+        else if (_busRigidbody.velocity.magnitude > 0.1f)
+        {
+            foreach (var passenger in _passengersNearby)
+            {
+                passenger.ResetTarget(); // Сбрасываем цель пассажиров
+                Debug.Log("Bus started moving, resetting passenger targets.");
             }
         }
     }

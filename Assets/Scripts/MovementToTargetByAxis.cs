@@ -34,6 +34,15 @@ public class MovementToTargetByAxis : MonoBehaviour
         Debug.Log($"Target set to: {_targetPosition}");
     }
 
+    // Метод для сброса цели
+    public void ResetTarget()
+    {
+        _hasTarget = false;  // Сбрасываем движение
+        _isTargetSet = false; // Устанавливаем, что цель больше не задана
+        CurrentState = MovementState.Idle; // Возвращаем в состояние ожидания
+        Debug.Log("Target reset, passenger is idle.");
+    }
+
     private void Update()
     {
         if (_hasTarget)

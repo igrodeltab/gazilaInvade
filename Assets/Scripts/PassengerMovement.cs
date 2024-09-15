@@ -48,6 +48,14 @@ public class PassengerMovement : MonoBehaviour
         }
     }
 
+    public void ResetTarget()
+    {
+        // Вызываем сброс цели через скрипт MovementToTargetByAxis
+        _movementToTargetScript.ResetTarget();
+        _isTargetSet = false; // Также сбрасываем этот флаг
+        Debug.Log("Passenger target reset.");
+    }
+
     private void MoveAwayFromBus()
     {
         transform.position += (Vector3)_moveAwayDirection * _moveSpeed * Time.deltaTime;
