@@ -15,6 +15,8 @@ public class MovementToTargetByAxis : MonoBehaviour
 
     private Vector3 _targetPosition;
     private bool _hasTarget = false;
+    public bool HasTarget => _hasTarget; // Свойство только для чтения
+
     private bool _movingAlongX = true;
     private bool _isTargetSet = false; // Добавляем переменную для отслеживания, установлена ли цель
 
