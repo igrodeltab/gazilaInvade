@@ -151,6 +151,7 @@ MonoBehaviour:
   _moveSpeed: 1
   _waitTimeAfterDropOff: 2
   _angleRange: 90
+  IsBoardingBus: 0
 --- !u!114 &6846036868427018344
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -176,7 +177,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9d8bd54d27b0d847a9e833318e9fcf8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetRadius: 5
+  minTargetRadius: 4
+  maxTargetRadius: 6
+  walkableTilemap: {fileID: 0}
+  walkableTile: {fileID: 0}
 --- !u!114 &2239510429516239931
 MonoBehaviour:
   m_ObjectHideFlags: 0

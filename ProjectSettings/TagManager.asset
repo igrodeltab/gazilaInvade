@@ -6,6 +6,7 @@ TagManager:
   tags:
   - SomeTag
   - Passenger
+  - WalkabilityTilemap
   layers:
   - Default
   - TransparentFX

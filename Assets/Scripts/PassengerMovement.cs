@@ -22,6 +22,8 @@ public class PassengerMovement : MonoBehaviour
         {
             Debug.LogError("MovementToTargetByAxis не найден на объекте PassengerMovement.");
         }
+
+        IsBoardingBus = false;
     }
 
     private void Update()
