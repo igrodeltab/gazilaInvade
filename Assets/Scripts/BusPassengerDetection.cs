@@ -21,19 +21,24 @@ public class BusPassengerDetection : MonoBehaviour
         {
             foreach (var passenger in _passengersNearby)
             {
-                if (passenger.IsReadyToBoard) // Проверка, готов ли пассажир к посадке
+                if (passenger.IsReadyToBoard && !passenger.IsBoardingBus) // Проверка, готов ли пассажир к посадке и не идет ли он уже к автобусу
                 {
+                    passenger.IsBoardingBus = true; // Устанавливаем флаг, что пассажир идет на посадку
                     passenger.MoveTowards(this.transform);
                 }
             }
         }
-        // Если автобус начинает движение, сбрасываем цель для всех пассажиров, которые не успели сесть
+        // Если автобус начинает движение, сбрасываем цель для пассажиров, которые шли к автобусу
         else if (_busRigidbody.velocity.magnitude > 0.1f)
         {
             foreach (var passenger in _passengersNearby)
             {
-                passenger.ResetTarget(); // Сбрасываем цель пассажиров
-                Debug.Log("Bus started moving, resetting passenger targets.");
+                if (passenger.IsBoardingBus) // Только для пассажиров, которые шли к автобусу
+                {
+                    passenger.ResetTarget(); // Сбрасываем цель пассажиров
+                    passenger.IsBoardingBus = false; // Сбрасываем флаг
+                    Debug.Log("Bus started moving, resetting passenger targets.");
+                }
             }
         }
     }

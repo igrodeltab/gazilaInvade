@@ -13,6 +13,7 @@ public class PassengerMovement : MonoBehaviour
     private bool _isTargetSet = false; // Добавляем переменную для отслеживания установки цели
 
     public bool IsReadyToBoard => _isReadyToBoard;
+    public bool IsBoardingBus = false;
 
     private void Awake()
     {
