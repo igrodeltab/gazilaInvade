@@ -71,9 +71,6 @@ public class MovementToTargetByAxis : MonoBehaviour
     // Метод для перемещения объекта к цели
     private void MoveTowardsTarget()
     {
-        // Лог для отладки
-        Debug.Log("Moving towards target");
-
         // Получаем текущие координаты объекта
         Vector3 currentPosition = transform.position;
 
