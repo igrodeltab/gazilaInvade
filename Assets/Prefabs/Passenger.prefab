@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 2239510429516239931}
   - component: {fileID: 276039170975640421}
   - component: {fileID: 8554324916913849828}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Passenger
   m_TagString: Passenger
   m_Icon: {fileID: 0}
@@ -177,10 +177,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9d8bd54d27b0d847a9e833318e9fcf8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  walkableTilemapTag: WalkabilityTilemap
   minTargetRadius: 4
   maxTargetRadius: 6
-  walkableTilemap: {fileID: 0}
-  walkableTile: {fileID: 0}
 --- !u!114 &2239510429516239931
 MonoBehaviour:
   m_ObjectHideFlags: 0

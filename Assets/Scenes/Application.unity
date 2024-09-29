@@ -5492,10 +5492,6 @@ PrefabInstance:
       value: Passenger (12)
       objectReference: {fileID: 0}
     - target: {fileID: 276039170975640423, guid: bc54ee135f3a6b246996928afb69d7ea, type: 3}
-      propertyPath: m_RootOrder
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 276039170975640423, guid: bc54ee135f3a6b246996928afb69d7ea, type: 3}
       propertyPath: m_LocalPosition.x
       value: 41.24
       objectReference: {fileID: 0}
@@ -6482,7 +6478,7 @@ GameObject:
   - component: {fileID: 1380523350}
   - component: {fileID: 1380523351}
   - component: {fileID: 1380523352}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PassengerDetection
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -31175,6 +31171,7 @@ MonoBehaviour:
   _maxPassengers: 10
   _currentPassengers: 0
   _dropOffPassengerPoint: {fileID: 1558593427}
+  _crushedPassenger: {fileID: 8701642107187942915, guid: 38014f6ebf49b744a8e9711678a8063f, type: 3}
 --- !u!114 &2080800786
 MonoBehaviour:
   m_ObjectHideFlags: 0

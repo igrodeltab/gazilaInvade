@@ -8,6 +8,7 @@ public class BusPickingUpPassenger : MonoBehaviour
     [SerializeField] private int _maxPassengers = 10; // Максимальное количество пассажиров
     [ReadOnly] [SerializeField] private int _currentPassengers = 0; // Текущее количество пассажиров
     [SerializeField] private Transform _dropOffPassengerPoint; // Приватное поле для ссылки на точку высадки
+    [SerializeField] private GameObject _crushedPassenger; // GameObject that holds the sprite of a crushed passenger
 
     public Transform DropOffPassengerPoint => _dropOffPassengerPoint; // Публичное свойство только для чтения
     public int CurrentPassengers => _currentPassengers; // Только для чтения
@@ -29,10 +30,15 @@ public class BusPickingUpPassenger : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collider.CompareTag("Passenger") && _rigidbody2D.velocity.magnitude < 0.01f)
+        PassengerMovement passengerMovement = collider.GetComponent<PassengerMovement>();
+
+        if (passengerMovement != null)
         {
-            PassengerMovement passengerMovement = collider.GetComponent<PassengerMovement>();
-            if (passengerMovement != null && passengerMovement.IsReadyToBoard)
+            if (_rigidbody2D.velocity.magnitude > 0.01f)
+            {
+                CrushPassenger(collider.gameObject);
+            }
+            else if (passengerMovement.IsReadyToBoard)
             {
                 PickUpPassenger(collider.gameObject);
             }
@@ -55,6 +61,13 @@ public class BusPickingUpPassenger : MonoBehaviour
 
             Destroy(passenger);
         }
+    }
+
+    private void CrushPassenger(GameObject passenger)
+    {
+        // Spawn the crushed passenger sprite at the passenger's position
+        Instantiate(_crushedPassenger, passenger.transform.position, Quaternion.identity);
+        Destroy(passenger);
     }
 
     public void RemovePassenger()
