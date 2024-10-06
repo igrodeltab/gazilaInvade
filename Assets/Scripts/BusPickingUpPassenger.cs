@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D))]
 public class BusPickingUpPassenger : MonoBehaviour
 {
     [SerializeField] private int _ticketPrice;
@@ -9,13 +8,12 @@ public class BusPickingUpPassenger : MonoBehaviour
     [ReadOnly] [SerializeField] private int _currentPassengers = 0; // Текущее количество пассажиров
     [SerializeField] private Transform _dropOffPassengerPoint; // Приватное поле для ссылки на точку высадки
     [SerializeField] private GameObject _crushedPassenger; // GameObject that holds the sprite of a crushed passenger
+    [SerializeField] private Rigidbody2D _rigidbody2D;
+    [SerializeField] private ShowTicketPrice _showTicketPrice;
 
     public Transform DropOffPassengerPoint => _dropOffPassengerPoint; // Публичное свойство только для чтения
     public int CurrentPassengers => _currentPassengers; // Только для чтения
     public int MaxPassengers => _maxPassengers; // Только для чтения
-
-    private Rigidbody2D _rigidbody2D;
-    private ShowTicketPrice _showTicketPrice;
 
     private void Awake()
     {
@@ -23,9 +21,6 @@ public class BusPickingUpPassenger : MonoBehaviour
         _currentPassengers = 0;
         PassengerCounter.Instance?.UpdatePassengerCount(CurrentPassengers, MaxPassengers);
         TotalEarningsCounter.Instance?.UpdateTotalEarningsCount(_totalEarnings);
-
-        _rigidbody2D = GetComponent<Rigidbody2D>();
-        _showTicketPrice = GetComponent<ShowTicketPrice>();
     }
 
     private void OnTriggerEnter2D(Collider2D collider)

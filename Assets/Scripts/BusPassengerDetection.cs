@@ -4,13 +4,14 @@ using UnityEngine;
 [RequireComponent(typeof(Collider2D))]
 public class BusPassengerDetection : MonoBehaviour
 {
+    [SerializeField] private BusPickingUpPassenger _busPickingUpPassenger; // Ссылка на скрипт управления автобусом
+
     private List<PassengerMovement> _passengersNearby = new List<PassengerMovement>();
-    private BusPickingUpPassenger _busPickingUpPassenger; // Ссылка на скрипт управления автобусом
     private Rigidbody2D _busRigidbody;
 
     private void Awake()
     {
-        _busPickingUpPassenger = GetComponentInParent<BusPickingUpPassenger>();
+        //_busPickingUpPassenger = GetComponentInParent<BusPickingUpPassenger>();
         _busRigidbody = GetComponentInParent<Rigidbody2D>();
     }
 
