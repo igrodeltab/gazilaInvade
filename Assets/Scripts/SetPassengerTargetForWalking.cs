@@ -3,11 +3,12 @@ using UnityEngine.Tilemaps;
 
 public class SetPassengerTargetForWalking : MonoBehaviour
 {
-    [TagSelector] [SerializeField] private string walkableTilemapTag = "WalkabilityTilemap"; // Tag for finding the Tilemap
+    [TagSelector] [SerializeField] private string walkableTilemapTag = "WalkabilityTilemap"; // Tag to search for Tilemap
     [SerializeField] private float minTargetRadius = 4f; // Minimum radius for target search
     [SerializeField] private float maxTargetRadius = 6f; // Maximum radius for target search
     private Tilemap walkableTilemap; // Reference to the Tilemap found by the tag
     private MovementToTargetByAxis movementComponent; // Passenger's movement component
+    private Vector3 _currentTargetPosition; // Passenger's current target position
 
     private void Start()
     {
@@ -48,9 +49,9 @@ public class SetPassengerTargetForWalking : MonoBehaviour
         Vector3Int randomTilePosition = GetRandomWalkableTileWithinRadius();
         if (randomTilePosition != Vector3Int.zero) // If a valid tile is found
         {
-            Vector3 targetPosition = walkableTilemap.CellToWorld(randomTilePosition) + walkableTilemap.cellSize / 2; // Center the target
-            movementComponent.SetTarget(targetPosition); // Set the target for the passenger
-            Debug.Log("New target assigned for the passenger: " + targetPosition);
+            _currentTargetPosition = walkableTilemap.CellToWorld(randomTilePosition) + walkableTilemap.cellSize / 2; // Center the target
+            movementComponent.SetTarget(_currentTargetPosition); // Set the target for the passenger
+            Debug.Log("New target assigned for the passenger: " + _currentTargetPosition);
         }
         else
         {
@@ -87,5 +88,30 @@ public class SetPassengerTargetForWalking : MonoBehaviour
     {
         TileBase tile = walkableTilemap.GetTile(tilePosition);
         return tile != null; // If the tile exists
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (movementComponent != null && movementComponent.HasTarget)
+        {
+            // Draw a sphere at the target position
+            Gizmos.color = Color.green;
+            Gizmos.DrawSphere(_currentTargetPosition, 0.3f);
+
+            // Draw a line from the passenger's X coordinate to the target's X coordinate
+            Vector3 passengerPosition = transform.position;
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(new Vector3(passengerPosition.x, passengerPosition.y, 0), new Vector3(_currentTargetPosition.x, passengerPosition.y, 0));
+
+            // Draw a line from the passenger's Y coordinate to the target's Y coordinate
+            Gizmos.color = Color.blue;
+            Gizmos.DrawLine(new Vector3(passengerPosition.x, passengerPosition.y, 0), new Vector3(passengerPosition.x, _currentTargetPosition.y, 0));
+        }
+
+        // Draw the min and max target search radius
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, minTargetRadius); // Draw the minimum radius
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireSphere(transform.position, maxTargetRadius); // Draw the maximum radius
     }
 }
