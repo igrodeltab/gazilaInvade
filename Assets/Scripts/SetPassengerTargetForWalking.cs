@@ -98,14 +98,28 @@ public class SetPassengerTargetForWalking : MonoBehaviour
             Gizmos.color = Color.green;
             Gizmos.DrawSphere(_currentTargetPosition, 0.3f);
 
-            // Draw a line from the passenger's X coordinate to the target's X coordinate
+            // Draw the path from the passenger to the target along the X and Y axes with thicker lines
             Vector3 passengerPosition = transform.position;
-            Gizmos.color = Color.red;
-            Gizmos.DrawLine(new Vector3(passengerPosition.x, passengerPosition.y, 0), new Vector3(_currentTargetPosition.x, passengerPosition.y, 0));
 
-            // Draw a line from the passenger's Y coordinate to the target's Y coordinate
+            // Increase line thickness for the Gizmos
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(passengerPosition, new Vector3(_currentTargetPosition.x, passengerPosition.y, 0));
+
             Gizmos.color = Color.blue;
-            Gizmos.DrawLine(new Vector3(passengerPosition.x, passengerPosition.y, 0), new Vector3(passengerPosition.x, _currentTargetPosition.y, 0));
+            Gizmos.DrawLine(new Vector3(_currentTargetPosition.x, passengerPosition.y, 0), _currentTargetPosition);
+
+            // Draw thicker lines by repeating the draw line commands slightly offset to simulate thickness
+            for (int i = -1; i <= 1; i++)
+            {
+                for (int j = -1; j <= 1; j++)
+                {
+                    Gizmos.color = Color.red;
+                    Gizmos.DrawLine(passengerPosition + new Vector3(i * 0.05f, j * 0.05f, 0), new Vector3(_currentTargetPosition.x + i * 0.05f, passengerPosition.y + j * 0.05f, 0));
+
+                    Gizmos.color = Color.blue;
+                    Gizmos.DrawLine(new Vector3(_currentTargetPosition.x + i * 0.05f, passengerPosition.y + j * 0.05f, 0), _currentTargetPosition + new Vector3(i * 0.05f, j * 0.05f, 0));
+                }
+            }
         }
 
         // Draw the min and max target search radius
