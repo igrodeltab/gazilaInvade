@@ -30847,6 +30847,9 @@ MonoBehaviour:
   _crushedPassenger: {fileID: 8701642107187942915, guid: 38014f6ebf49b744a8e9711678a8063f, type: 3}
   _rigidbody2D: {fileID: 2080800780}
   _showTicketPrice: {fileID: 2080800786}
+  _bloodPrefab: {fileID: 8701642107187942915, guid: 4a376c06926315f418967986fffdad21, type: 3}
+  _bloodSpawnInterval: 0.1
+  _bloodSpawnDuration: 2
 --- !u!1 &1916007026
 GameObject:
   m_ObjectHideFlags: 0
