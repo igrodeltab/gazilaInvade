@@ -76,51 +76,63 @@ public class RouteLineVisualizer : MonoBehaviour
         if (viewportPoint.x == 0 && viewportPoint.y == 1)
         {
             // Top-left corner (mirror vertically)
-            _spriteRect.GetComponent<Image>().sprite = _arrowDiagonalSprite;
-            _spriteRect.localRotation = Quaternion.Euler(0, 180, 0); // Mirror vertically
+            UpdateSprite(_arrowDiagonalSprite, Quaternion.Euler(0, 180, 0)); // Mirror vertically
         }
         else if (viewportPoint.x == 1 && viewportPoint.y == 1)
         {
             // Top-right corner (no rotation)
-            _spriteRect.GetComponent<Image>().sprite = _arrowDiagonalSprite;
-            _spriteRect.localRotation = Quaternion.Euler(0, 0, 0); // Point up-right
+            UpdateSprite(_arrowDiagonalSprite, Quaternion.identity); // No mirroring or rotation
         }
         else if (viewportPoint.x == 0 && viewportPoint.y == 0)
         {
             // Bottom-left corner (mirror both horizontally and vertically)
-            _spriteRect.GetComponent<Image>().sprite = _arrowDiagonalSprite;
-            _spriteRect.localRotation = Quaternion.Euler(180, 180, 0); // Mirror both horizontally and vertically
+            UpdateSprite(_arrowDiagonalSprite, Quaternion.Euler(180, 180, 0)); // Mirror both horizontally and vertically
         }
         else if (viewportPoint.x == 1 && viewportPoint.y == 0)
         {
             // Bottom-right corner (mirror horizontally)
-            _spriteRect.GetComponent<Image>().sprite = _arrowDiagonalSprite;
-            _spriteRect.localRotation = Quaternion.Euler(180, 0, 0); // Mirror horizontally
+            UpdateSprite(_arrowDiagonalSprite, Quaternion.Euler(180, 0, 0)); // Mirror horizontally
         }
         // Handle the edges (top, bottom, left, right)
         else if (viewportPoint.y == 1)
         {
             // Top edge
-            _spriteRect.GetComponent<Image>().sprite = _arrowUpSprite;
-            _spriteRect.localRotation = Quaternion.Euler(0, 0, 0); // Point upwards
+            UpdateSprite(_arrowUpSprite, Quaternion.Euler(0, 0, 0)); // Point upwards
         }
         else if (viewportPoint.y == 0)
         {
             // Bottom edge
-            _spriteRect.GetComponent<Image>().sprite = _arrowUpSprite;
-            _spriteRect.localRotation = Quaternion.Euler(0, 0, 180); // Point downwards
+            UpdateSprite(_arrowUpSprite, Quaternion.Euler(0, 0, 180)); // Point downwards
         }
         else if (viewportPoint.x == 0)
         {
             // Left edge
-            _spriteRect.GetComponent<Image>().sprite = _arrowUpSprite;
-            _spriteRect.localRotation = Quaternion.Euler(0, 0, 90); // Point left
+            UpdateSprite(_arrowUpSprite, Quaternion.Euler(0, 0, 90)); // Point left
         }
         else if (viewportPoint.x == 1)
         {
             // Right edge
-            _spriteRect.GetComponent<Image>().sprite = _arrowUpSprite;
-            _spriteRect.localRotation = Quaternion.Euler(0, 0, -90); // Point right
+            UpdateSprite(_arrowUpSprite, Quaternion.Euler(0, 0, -90)); // Point right
         }
+    }
+
+    private void UpdateSprite(Sprite newSprite, Quaternion rotation)
+    {
+        // Update the sprite in the Image component
+        Image image = _spriteRect.GetComponent<Image>();
+        image.sprite = newSprite;
+
+        // Adjust the size of the RectTransform based on the sprite's real size in pixels
+        if (newSprite != null)
+        {
+            float width = newSprite.textureRect.width;
+            float height = newSprite.textureRect.height;
+
+            // Update the RectTransform size to match the sprite's dimensions
+            _spriteRect.sizeDelta = new Vector2(width, height);
+        }
+
+        // Apply the rotation
+        _spriteRect.localRotation = rotation;
     }
 }
