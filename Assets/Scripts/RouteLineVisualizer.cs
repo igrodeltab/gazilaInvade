@@ -11,15 +11,15 @@ public class RouteLineVisualizer : MonoBehaviour
     {
         // Instantiate the prefab for displaying the sprite
         _intersectionObject = Instantiate(_spritePrefab);
-        _intersectionObject.SetActive(false); // Hide the sprite initially
+        _intersectionObject.SetActive(false); // Initially hide the sprite
     }
 
     private void Update()
     {
-        DrawLineAndCheckIntersection();
+        UpdateIntersection();
     }
 
-    private void DrawLineAndCheckIntersection()
+    private void UpdateIntersection()
     {
         if (_busRoute == null || _busRoute.GetCurrentRoutePoint() == null)
             return;
@@ -27,23 +27,27 @@ public class RouteLineVisualizer : MonoBehaviour
         Vector3 busPosition = transform.position;
         Vector3 pointPosition = _busRoute.GetCurrentRoutePoint().transform.position;
 
-        // Visualize the line
-        Debug.DrawLine(busPosition, pointPosition, Color.red);
+        // Check if the route point is within the screen bounds
+        Vector3 screenPoint = _mainCamera.WorldToViewportPoint(pointPosition);
 
-        // Get screen boundaries
-        Vector3 screenMin = _mainCamera.ViewportToWorldPoint(new Vector3(0, 0, _mainCamera.nearClipPlane));
-        Vector3 screenMax = _mainCamera.ViewportToWorldPoint(new Vector3(1, 1, _mainCamera.nearClipPlane));
-
-        // Check for intersection with screen boundaries
-        Vector3 intersectionPoint;
-        if (CheckLineScreenIntersection(busPosition, pointPosition, screenMin, screenMax, out intersectionPoint))
+        // If the point is within the screen (between 0 and 1 in both x and y axes), we hide the sprite
+        if (screenPoint.x >= 0 && screenPoint.x <= 1 && screenPoint.y >= 0 && screenPoint.y <= 1)
         {
-            _intersectionObject.SetActive(true);
-            _intersectionObject.transform.position = intersectionPoint;
+            _intersectionObject.SetActive(false); // Hide sprite if the point is inside the screen
         }
         else
         {
-            _intersectionObject.SetActive(false); // Hide the sprite if no intersection
+            _intersectionObject.SetActive(true); // Show sprite if the point is outside the screen
+
+            // Update the sprite position to where the line intersects the screen boundary
+            Vector3 screenMin = _mainCamera.ViewportToWorldPoint(new Vector3(0, 0, _mainCamera.nearClipPlane));
+            Vector3 screenMax = _mainCamera.ViewportToWorldPoint(new Vector3(1, 1, _mainCamera.nearClipPlane));
+            Vector3 intersectionPoint;
+
+            if (CheckLineScreenIntersection(busPosition, pointPosition, screenMin, screenMax, out intersectionPoint))
+            {
+                _intersectionObject.transform.position = intersectionPoint; // Update position only if there is an intersection
+            }
         }
     }
 
