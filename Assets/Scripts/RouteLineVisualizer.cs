@@ -16,10 +16,10 @@ public class RouteLineVisualizer : MonoBehaviour
 
     private void Update()
     {
-        UpdateIntersection();
+        DrawLineAndCheckIntersection();
     }
 
-    private void UpdateIntersection()
+    private void DrawLineAndCheckIntersection()
     {
         if (_busRoute == null || _busRoute.GetCurrentRoutePoint() == null)
             return;
@@ -27,7 +27,14 @@ public class RouteLineVisualizer : MonoBehaviour
         Vector3 busPosition = transform.position;
         Vector3 pointPosition = _busRoute.GetCurrentRoutePoint().transform.position;
 
-        // Check if the route point is within the screen bounds
+        // Visualize the line
+        Debug.DrawLine(busPosition, pointPosition, Color.red);
+
+        // Get screen boundaries in world coordinates
+        Vector3 screenMin = _mainCamera.ViewportToWorldPoint(new Vector3(0, 0, _mainCamera.nearClipPlane));
+        Vector3 screenMax = _mainCamera.ViewportToWorldPoint(new Vector3(1, 1, _mainCamera.farClipPlane));
+
+        // Check if the point is within the screen bounds using ViewportPoint
         Vector3 screenPoint = _mainCamera.WorldToViewportPoint(pointPosition);
 
         // If the point is within the screen (between 0 and 1 in both x and y axes), we hide the sprite
@@ -37,16 +44,13 @@ public class RouteLineVisualizer : MonoBehaviour
         }
         else
         {
-            _intersectionObject.SetActive(true); // Show sprite if the point is outside the screen
+            _intersectionObject.SetActive(true); // Show the sprite if the point is outside the screen
 
             // Update the sprite position to where the line intersects the screen boundary
-            Vector3 screenMin = _mainCamera.ViewportToWorldPoint(new Vector3(0, 0, _mainCamera.nearClipPlane));
-            Vector3 screenMax = _mainCamera.ViewportToWorldPoint(new Vector3(1, 1, _mainCamera.nearClipPlane));
             Vector3 intersectionPoint;
-
             if (CheckLineScreenIntersection(busPosition, pointPosition, screenMin, screenMax, out intersectionPoint))
             {
-                _intersectionObject.transform.position = intersectionPoint; // Update position only if there is an intersection
+                _intersectionObject.transform.position = intersectionPoint; // Update position only if intersection exists
             }
         }
     }
@@ -62,12 +66,12 @@ public class RouteLineVisualizer : MonoBehaviour
         if (LineIntersect(start, end, new Vector3(screenMax.x, screenMin.y, start.z), screenMax, out intersection)) return true; // Right edge
         if (LineIntersect(start, end, new Vector3(screenMin.x, screenMax.y, start.z), screenMax, out intersection)) return true; // Top edge
 
-        return false; // No intersection
+        return false; // No intersection found
     }
 
     private bool LineIntersect(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 p4, out Vector3 intersection)
     {
-        // Calculate the intersection point of the lines
+        // Calculate the intersection point of two lines
         intersection = Vector3.zero;
 
         float a1 = p2.y - p1.y;
@@ -82,7 +86,7 @@ public class RouteLineVisualizer : MonoBehaviour
 
         if (delta == 0)
         {
-            return false; // Lines are parallel
+            return false; // Parallel lines
         }
 
         intersection = new Vector3(
@@ -91,7 +95,7 @@ public class RouteLineVisualizer : MonoBehaviour
             0
         );
 
-        // Check if the intersection point is within the line segments
+        // Check if the intersection point lies within both segments
         return IsBetween(p1, p2, intersection) && IsBetween(p3, p4, intersection);
     }
 
