@@ -40,16 +40,25 @@ public class RouteLineVisualizer : MonoBehaviour
         {
             _spriteRect.gameObject.SetActive(true); // Show the sprite if the point is outside the screen
 
-            // Clamp the viewport point to the edges (0 to 1), but not inside the screen
+            // Clamp the viewport point to the edges (0 to 1)
             viewportPoint.x = Mathf.Clamp01(viewportPoint.x);
             viewportPoint.y = Mathf.Clamp01(viewportPoint.y);
 
             // Calculate the position on the screen (use the canvas size as reference)
             Vector2 canvasSize = _canvas.GetComponent<RectTransform>().sizeDelta;
 
-            // Convert viewport coordinates to canvas coordinates (anchor point in canvas space)
+            // Convert viewport coordinates to canvas coordinates
             Vector2 canvasPos = new Vector2(viewportPoint.x * canvasSize.x - canvasSize.x / 2,
                                             viewportPoint.y * canvasSize.y - canvasSize.y / 2);
+
+            // Adjust the position so that the sprite does not overlap the screen edge
+            Vector2 spriteSize = _spriteRect.sizeDelta;
+
+            // Adjust based on position near the edges
+            if (viewportPoint.x == 0) canvasPos.x += spriteSize.x / 2; // Left edge
+            if (viewportPoint.x == 1) canvasPos.x -= spriteSize.x / 2; // Right edge
+            if (viewportPoint.y == 0) canvasPos.y += spriteSize.y / 2; // Bottom edge
+            if (viewportPoint.y == 1) canvasPos.y -= spriteSize.y / 2; // Top edge
 
             // Set the position of the UI element on the canvas
             _spriteRect.anchoredPosition = canvasPos;
