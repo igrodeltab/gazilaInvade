@@ -31072,6 +31072,7 @@ GameObject:
   - component: {fileID: 2080800784}
   - component: {fileID: 2080800783}
   - component: {fileID: 2080800787}
+  - component: {fileID: 2080800789}
   - component: {fileID: 2080800786}
   - component: {fileID: 2080800788}
   m_Layer: 0
@@ -31259,6 +31260,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   offset: {x: 0.11, y: -0.11, z: 0}
   childObject: {fileID: 254323801}
+--- !u!114 &2080800789
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2080800776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55c931e3b2b0a9a408c4d210d39d80f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _busRoute: {fileID: 2080800787}
+  _mainCamera: {fileID: 519420031}
+  _spritePrefab: {fileID: 8701642107187942915, guid: 38014f6ebf49b744a8e9711678a8063f, type: 3}
 --- !u!1001 &276039169568926274
 PrefabInstance:
   m_ObjectHideFlags: 0

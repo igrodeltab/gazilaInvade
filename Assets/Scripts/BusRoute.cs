@@ -42,4 +42,14 @@ public class BusRoute : MonoBehaviour
             _routePoints[0].SetActive(true); // Activate the first route point
         }
     }
+
+    // Method to return the current active route point
+    public GameObject GetCurrentRoutePoint()
+    {
+        if (_routePoints != null && _routePoints.Count > 0 && _currentPointIndex < _routePoints.Count)
+        {
+            return _routePoints[_currentPointIndex]; // Return the current active route point
+        }
+        return null; // Return null if the list is empty or the index is out of bounds
+    }
 }
