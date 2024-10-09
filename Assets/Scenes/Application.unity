@@ -31351,6 +31351,8 @@ MonoBehaviour:
   _busRoute: {fileID: 2080800787}
   _mainCamera: {fileID: 519420031}
   _spriteRect: {fileID: 1035248642}
+  _arrowUpSprite: {fileID: 21300000, guid: a70442c46c3c41f4c8cb509ccbc3a104, type: 3}
+  _arrowDiagonalSprite: {fileID: 21300000, guid: 057b559aea4c56947af5a37106df7b02, type: 3}
 --- !u!1001 &276039169568926274
 PrefabInstance:
   m_ObjectHideFlags: 0

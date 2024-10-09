@@ -6,6 +6,8 @@ public class RouteLineVisualizer : MonoBehaviour
     [SerializeField] private BusRoute _busRoute; // Reference to the existing BusRoute script
     [SerializeField] private Camera _mainCamera; // Camera to define screen boundaries
     [SerializeField] private RectTransform _spriteRect; // UI element (Image) for displaying at the intersection point
+    [SerializeField] private Sprite _arrowUpSprite; // Upward arrow sprite
+    [SerializeField] private Sprite _arrowDiagonalSprite; // Diagonal arrow sprite (default direction: up-right)
     private Canvas _canvas; // Reference to the UI canvas
 
     private void Start()
@@ -62,6 +64,63 @@ public class RouteLineVisualizer : MonoBehaviour
 
             // Set the position of the UI element on the canvas
             _spriteRect.anchoredPosition = canvasPos;
+
+            // Choose the correct sprite and rotation based on position
+            ChooseSpriteAndRotation(viewportPoint);
+        }
+    }
+
+    private void ChooseSpriteAndRotation(Vector3 viewportPoint)
+    {
+        // Handle the corners first
+        if (viewportPoint.x == 0 && viewportPoint.y == 1)
+        {
+            // Top-left corner (mirror vertically)
+            _spriteRect.GetComponent<Image>().sprite = _arrowDiagonalSprite;
+            _spriteRect.localRotation = Quaternion.Euler(0, 180, 0); // Mirror vertically
+        }
+        else if (viewportPoint.x == 1 && viewportPoint.y == 1)
+        {
+            // Top-right corner (no rotation)
+            _spriteRect.GetComponent<Image>().sprite = _arrowDiagonalSprite;
+            _spriteRect.localRotation = Quaternion.Euler(0, 0, 0); // Point up-right
+        }
+        else if (viewportPoint.x == 0 && viewportPoint.y == 0)
+        {
+            // Bottom-left corner (mirror both horizontally and vertically)
+            _spriteRect.GetComponent<Image>().sprite = _arrowDiagonalSprite;
+            _spriteRect.localRotation = Quaternion.Euler(180, 180, 0); // Mirror both horizontally and vertically
+        }
+        else if (viewportPoint.x == 1 && viewportPoint.y == 0)
+        {
+            // Bottom-right corner (mirror horizontally)
+            _spriteRect.GetComponent<Image>().sprite = _arrowDiagonalSprite;
+            _spriteRect.localRotation = Quaternion.Euler(180, 0, 0); // Mirror horizontally
+        }
+        // Handle the edges (top, bottom, left, right)
+        else if (viewportPoint.y == 1)
+        {
+            // Top edge
+            _spriteRect.GetComponent<Image>().sprite = _arrowUpSprite;
+            _spriteRect.localRotation = Quaternion.Euler(0, 0, 0); // Point upwards
+        }
+        else if (viewportPoint.y == 0)
+        {
+            // Bottom edge
+            _spriteRect.GetComponent<Image>().sprite = _arrowUpSprite;
+            _spriteRect.localRotation = Quaternion.Euler(0, 0, 180); // Point downwards
+        }
+        else if (viewportPoint.x == 0)
+        {
+            // Left edge
+            _spriteRect.GetComponent<Image>().sprite = _arrowUpSprite;
+            _spriteRect.localRotation = Quaternion.Euler(0, 0, 90); // Point left
+        }
+        else if (viewportPoint.x == 1)
+        {
+            // Right edge
+            _spriteRect.GetComponent<Image>().sprite = _arrowUpSprite;
+            _spriteRect.localRotation = Quaternion.Euler(0, 0, -90); // Point right
         }
     }
 }
