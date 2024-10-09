@@ -122,13 +122,14 @@ public class RouteLineVisualizer : MonoBehaviour
         Image image = _spriteRect.GetComponent<Image>();
         image.sprite = newSprite;
 
-        // Adjust the size of the RectTransform based on the sprite's real size in pixels
+        // Adjust the size of the RectTransform based on the sprite's real size in pixels and pixelsPerUnit
         if (newSprite != null)
         {
-            float width = newSprite.textureRect.width;
-            float height = newSprite.textureRect.height;
+            float pixelsPerUnit = newSprite.pixelsPerUnit;
+            float width = newSprite.textureRect.width * pixelsPerUnit;
+            float height = newSprite.textureRect.height * pixelsPerUnit;
 
-            // Update the RectTransform size to match the sprite's dimensions
+            // Update the RectTransform size to match the sprite's dimensions considering pixels per unit
             _spriteRect.sizeDelta = new Vector2(width, height);
         }
 
