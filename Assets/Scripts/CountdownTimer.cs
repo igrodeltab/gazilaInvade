@@ -1,35 +1,37 @@
 ﻿using UnityEngine;
 using TMPro;
-using UnityEngine.SceneManagement; // Для перезапуска уровня
+using UnityEngine.SceneManagement; // For restarting the level
 
 public class CountdownTimer : MonoBehaviour
 {
     [SerializeField] private float _countdownTime = 60f; // Countdown time in seconds
     [SerializeField] private TextMeshProUGUI _timerText; // Reference to the TextMeshProUGUI component
     [SerializeField] private TextMeshProUGUI _defeatText; // Reference to the TextMeshProUGUI for defeat screen
+    [SerializeField] private TextMeshProUGUI _victoryText; // Reference to the TextMeshProUGUI for victory screen
     [SerializeField] private KeyCode _restartKey = KeyCode.R; // Key to restart the level
 
     private float _currentTime;
-    private bool _isDefeated = false; // Flag for defeat state
+    private bool _isGameOver = false; // Flag to check if the game is over (victory or defeat)
 
     void Start()
     {
         _currentTime = _countdownTime;
         if (_defeatText != null) _defeatText.gameObject.SetActive(false); // Hide defeat text at start
+        if (_victoryText != null) _victoryText.gameObject.SetActive(false); // Hide victory text at start
     }
 
     void Update()
     {
-        if (_isDefeated && Input.GetKeyDown(_restartKey))
+        if (_isGameOver && Input.GetKeyDown(_restartKey))
         {
             RestartLevel(); // Restart the level when the restart key is pressed
         }
-        else if (!_isDefeated && _currentTime > 0)
+        else if (!_isGameOver && _currentTime > 0)
         {
             _currentTime -= Time.deltaTime; // Decrease time
             UpdateTimerText(_currentTime); // Update timer text in minutes:seconds format
         }
-        else if (_currentTime <= 0 && !_isDefeated)
+        else if (_currentTime <= 0 && !_isGameOver)
         {
             TimerFinished(); // Call method when timer finishes
         }
@@ -43,11 +45,21 @@ public class CountdownTimer : MonoBehaviour
 
     private void TimerFinished()
     {
-        _isDefeated = true; // Set defeat state
+        _isGameOver = true; // Set game over state
         Time.timeScale = 0f; // Stop the game
         if (_defeatText != null)
         {
             _defeatText.gameObject.SetActive(true); // Show defeat text
+        }
+    }
+
+    public void Victory() // Сделали метод публичным
+    {
+        _isGameOver = true; // Set game over state
+        Time.timeScale = 0f; // Stop the game
+        if (_victoryText != null)
+        {
+            _victoryText.gameObject.SetActive(true); // Show victory text
         }
     }
 

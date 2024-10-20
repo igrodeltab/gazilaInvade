@@ -4,6 +4,7 @@ using System.Collections.Generic;
 public class BusRoute : MonoBehaviour
 {
     [SerializeField] private List<GameObject> _routePoints; // List of route points
+    [SerializeField] private CountdownTimer _countdownTimer; // Reference to CountdownTimer assigned in the inspector
     private int _currentPointIndex = 0; // Current index in the list of route points
 
     private void Start()
@@ -20,7 +21,8 @@ public class BusRoute : MonoBehaviour
             _currentPointIndex++; // Move to the next point
             if (_currentPointIndex >= _routePoints.Count)
             {
-                _currentPointIndex = 0; // Restart the route or stop
+                // Victory condition: if the last point is reached, trigger the Victory method
+                _countdownTimer.Victory();
             }
 
             if (_currentPointIndex < _routePoints.Count)
