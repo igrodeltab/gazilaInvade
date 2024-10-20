@@ -3,8 +3,8 @@ using TMPro;
 
 public class PauseGameOnStart : MonoBehaviour
 {
-    public KeyCode unpauseKey = KeyCode.F; // Горячая клавиша для отжатия паузы
-    public TextMeshProUGUI pauseText; // Ссылка на TextMeshPro для отображения текста
+    public KeyCode unpauseKey = KeyCode.F; // Hotkey to unpause the game
+    public TextMeshProUGUI pauseText; // Reference to the TextMeshPro for displaying pause text
 
     void Start()
     {
@@ -21,19 +21,19 @@ public class PauseGameOnStart : MonoBehaviour
 
     void PauseGame()
     {
-        Time.timeScale = 0f; // Ставим игру на паузу
+        Time.timeScale = 0f; // Pause the game
         if (pauseText != null)
         {
-            pauseText.gameObject.SetActive(true); // Показываем текст паузы
+            pauseText.gameObject.SetActive(true); // Show the pause text
         }
     }
 
     void UnpauseGame()
     {
-        Time.timeScale = 1f; // Снимаем паузу
+        Time.timeScale = 1f; // Unpause the game
         if (pauseText != null)
         {
-            pauseText.gameObject.SetActive(false); // Отключаем текст паузы
+            pauseText.gameObject.SetActive(false); // Hide the pause text
         }
     }
 }
