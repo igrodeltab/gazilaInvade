@@ -7,16 +7,15 @@ public class BusMovement : MonoBehaviour
     [SerializeField] private float _decelerationRate = 2.0f; // Rate of deceleration
     [SerializeField] private float _maxSpeed = 5.0f;         // Maximum speed of the bus
     [SerializeField] private float _turnSpeed = 200.0f;      // Speed of turning
+    [SerializeField] private InputSystem _inputSystem;
 
     private Rigidbody2D _rigidbody2D;
-    private InputSystem _inputSystem;
     private float _targetSpeed = 0;
     private bool _isBraking = false;
 
     private void Awake()
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
-        _inputSystem = GetComponent<InputSystem>();
     }
 
     private void Update()
