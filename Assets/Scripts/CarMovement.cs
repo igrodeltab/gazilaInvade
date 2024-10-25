@@ -11,6 +11,7 @@ public class CarMovement : MonoBehaviour
     private Rigidbody2D _rigidbody2D;
     private float _targetSpeed = 0;
     private bool _isBraking = false;
+    private float _turnDirection = 0; // Variable to store turn direction (0 for straight, 1 for right, -1 for left)
 
     private void Awake()
     {
@@ -35,6 +36,11 @@ public class CarMovement : MonoBehaviour
         // Set target speed to zero and enable braking
         _targetSpeed = 0;
         _isBraking = true;
+    }
+
+    public void TurnRight()
+    {
+        _turnDirection = 1; // Set turn direction to right
     }
 
     private void HandleMovement()
@@ -70,14 +76,15 @@ public class CarMovement : MonoBehaviour
 
     private void HandleRotation()
     {
-        float turnAmount = 0;
-
-        // Set up the turning logic based on the target speed
         float currentSpeed = _rigidbody2D.velocity.magnitude;
         float speedPercentage = currentSpeed / _maxSpeed;
         float currentTurnSpeed = _turnSpeed * speedPercentage;
 
-        transform.Rotate(0, 0, turnAmount * currentTurnSpeed * Time.deltaTime);
+        // Apply rotation based on turn direction
+        transform.Rotate(0, 0, -_turnDirection * currentTurnSpeed * Time.deltaTime);
+
+        // Reset turn direction after applying rotation
+        _turnDirection = 0;
 
         // Update movement direction based on the new rotation angle
         if (currentSpeed > 0)
