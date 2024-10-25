@@ -34724,7 +34724,6 @@ MonoBehaviour:
   _decelerationRate: 2
   _maxSpeed: 2
   _turnSpeed: 200
-  _inputSystem: {fileID: 7846124969213463877}
 --- !u!4 &1260484494381739859
 Transform:
   m_ObjectHideFlags: 0
@@ -34878,6 +34877,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _tileTriggerChecker: {fileID: 1628389537}
+  _carMovement: {fileID: 1230172188545950025}
 --- !u!1001 &8082740170819976000
 PrefabInstance:
   m_ObjectHideFlags: 0

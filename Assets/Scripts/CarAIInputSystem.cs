@@ -2,28 +2,19 @@
 
 public class CarAIInputSystem : MonoBehaviour
 {
-    public float VerticalInput { get; private set; }
-    public float HorizontalInput { get; private set; }
-
     [SerializeField] private TileTriggerChecker _tileTriggerChecker; // Reference to TileTriggerChecker
+    [SerializeField] private CarMovement _carMovement; // Reference to CarMovement component
 
     private void Update()
     {
-        // Reset VerticalInput and HorizontalInput
-        VerticalInput = 0;
-        HorizontalInput = 0;
-
-        // Check if there are 2 or more tiles in the area
+        // Check the area for tiles and send commands
         if (_tileTriggerChecker.TileCountInArea >= 2)
         {
-            VerticalInput = 1; // Move forward
+            _carMovement.MoveForward(); // Command to move forward
         }
         else
         {
-            VerticalInput = -1; // Stop moving forward
+            _carMovement.Stop(); // Command to stop
         }
-
-        // Additional logic for HorizontalInput if needed
-        // HorizontalInput can be set based on other conditions if required
     }
 }

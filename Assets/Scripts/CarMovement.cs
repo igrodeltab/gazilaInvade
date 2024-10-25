@@ -7,7 +7,6 @@ public class CarMovement : MonoBehaviour
     [SerializeField] private float _decelerationRate = 2.0f; // Rate of deceleration
     [SerializeField] private float _maxSpeed = 5.0f;         // Maximum speed of the bus
     [SerializeField] private float _turnSpeed = 200.0f;      // Speed of turning
-    [SerializeField] private CarAIInputSystem _inputSystem;
 
     private Rigidbody2D _rigidbody2D;
     private float _targetSpeed = 0;
@@ -20,52 +19,22 @@ public class CarMovement : MonoBehaviour
 
     private void Update()
     {
-        HandleInput();
         HandleMovement();
         HandleRotation();
     }
 
-    private void HandleInput()
+    public void MoveForward()
     {
-        if (_inputSystem.VerticalInput > 0)
-        {
-            if (IsMovingForward() || IsStationary())
-            {
-                _targetSpeed = _maxSpeed;
-                _isBraking = false;
-            }
-            else
-            {
-                _isBraking = true;
-            }
-        }
-        else if (_inputSystem.VerticalInput < 0)
-        {
-            if (IsMovingBackward() || IsStationary())
-            {
-                _targetSpeed = -_maxSpeed;
-                _isBraking = false;
-            }
-            else
-            {
-                _isBraking = true;
-            }
-        }
+        // Set target speed to max and turn off braking
+        _targetSpeed = _maxSpeed;
+        _isBraking = false;
     }
 
-    private bool IsMovingForward()
+    public void Stop()
     {
-        return Vector2.Dot(_rigidbody2D.velocity, transform.up) > 0;
-    }
-
-    private bool IsMovingBackward()
-    {
-        return Vector2.Dot(_rigidbody2D.velocity, transform.up) < 0;
-    }
-
-    private bool IsStationary()
-    {
-        return _rigidbody2D.velocity.magnitude < 0.01f;
+        // Set target speed to zero and enable braking
+        _targetSpeed = 0;
+        _isBraking = true;
     }
 
     private void HandleMovement()
@@ -84,21 +53,15 @@ public class CarMovement : MonoBehaviour
             {
                 _rigidbody2D.velocity = Vector2.zero;
                 _isBraking = false;
-                _targetSpeed = 0;
             }
         }
         else
         {
-            // Accelerate or decelerate to reach the target speed
+            // Accelerate to reach the target speed
             if (currentSpeed < Mathf.Abs(_targetSpeed))
             {
-                Vector2 acceleration = forwardDirection * _accelerationRate * Time.deltaTime * Mathf.Sign(_targetSpeed);
+                Vector2 acceleration = forwardDirection * _accelerationRate * Time.deltaTime;
                 _rigidbody2D.velocity += acceleration;
-            }
-            else if (currentSpeed > Mathf.Abs(_targetSpeed))
-            {
-                Vector2 deceleration = -forwardDirection * _decelerationRate * Time.deltaTime * Mathf.Sign(_targetSpeed);
-                _rigidbody2D.velocity += deceleration;
             }
         }
 
@@ -109,15 +72,7 @@ public class CarMovement : MonoBehaviour
     {
         float turnAmount = 0;
 
-        if (_inputSystem.HorizontalInput > 0)
-        {
-            turnAmount = 1;  // Turn right
-        }
-        else if (_inputSystem.HorizontalInput < 0)
-        {
-            turnAmount = -1;  // Turn left
-        }
-
+        // Set up the turning logic based on the target speed
         float currentSpeed = _rigidbody2D.velocity.magnitude;
         float speedPercentage = currentSpeed / _maxSpeed;
         float currentTurnSpeed = _turnSpeed * speedPercentage;
@@ -127,22 +82,16 @@ public class CarMovement : MonoBehaviour
         // Update movement direction based on the new rotation angle
         if (currentSpeed > 0)
         {
-            _rigidbody2D.velocity = transform.up * currentSpeed * Mathf.Sign(_targetSpeed);
+            _rigidbody2D.velocity = transform.up * currentSpeed;
         }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        // Calculate relative velocity of the collision
-        Vector2 relativeVelocity = collision.relativeVelocity;
-
-        // Reset the current speed of the bus
+        // Reset the current speed of the car on collision
         _rigidbody2D.velocity = Vector2.zero;
         _rigidbody2D.angularVelocity = 0;
         _isBraking = false;
         _targetSpeed = 0;
-
-        // Apply a force to push the bus back
-        _rigidbody2D.AddForce(-relativeVelocity * _rigidbody2D.mass, ForceMode2D.Impulse);
     }
 }
