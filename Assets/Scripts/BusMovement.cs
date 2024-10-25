@@ -3,14 +3,10 @@
 [RequireComponent(typeof(Rigidbody2D))]
 public class BusMovement : MonoBehaviour
 {
-    [SerializeField]
-    private float _accelerationRate = 1.0f;
-    [SerializeField]
-    private float _decelerationRate = 2.0f;
-    [SerializeField]
-    private float _maxSpeed = 5.0f;
-    [SerializeField]
-    private float _turnSpeed = 200.0f;
+    [SerializeField] private float _accelerationRate = 1.0f; // Rate of acceleration
+    [SerializeField] private float _decelerationRate = 2.0f; // Rate of deceleration
+    [SerializeField] private float _maxSpeed = 5.0f;         // Maximum speed of the bus
+    [SerializeField] private float _turnSpeed = 200.0f;      // Speed of turning
 
     private Rigidbody2D _rigidbody2D;
     private InputSystem _inputSystem;
@@ -81,7 +77,7 @@ public class BusMovement : MonoBehaviour
 
         if (_isBraking)
         {
-            // Торможение: применяем силу замедления в направлении, противоположном текущему движению
+            // Apply braking force in the opposite direction of current movement
             Vector2 deceleration = -currentDirection * _decelerationRate * Time.deltaTime;
             _rigidbody2D.velocity += deceleration;
 
@@ -94,7 +90,7 @@ public class BusMovement : MonoBehaviour
         }
         else
         {
-            // Ускорение или замедление до целевой скорости
+            // Accelerate or decelerate to reach the target speed
             if (currentSpeed < Mathf.Abs(_targetSpeed))
             {
                 Vector2 acceleration = forwardDirection * _accelerationRate * Time.deltaTime * Mathf.Sign(_targetSpeed);
@@ -116,11 +112,11 @@ public class BusMovement : MonoBehaviour
 
         if (_inputSystem.HorizontalInput > 0)
         {
-            turnAmount = 1;  // Для поворота направо
+            turnAmount = 1;  // Turn right
         }
         else if (_inputSystem.HorizontalInput < 0)
         {
-            turnAmount = -1;  // Для поворота налево
+            turnAmount = -1;  // Turn left
         }
 
         float currentSpeed = _rigidbody2D.velocity.magnitude;
@@ -129,7 +125,7 @@ public class BusMovement : MonoBehaviour
 
         transform.Rotate(0, 0, turnAmount * currentTurnSpeed * Time.deltaTime);
 
-        // Обновляем направление движения согласно новому углу поворота
+        // Update movement direction based on the new rotation angle
         if (currentSpeed > 0)
         {
             _rigidbody2D.velocity = transform.up * currentSpeed * Mathf.Sign(_targetSpeed);
@@ -138,16 +134,16 @@ public class BusMovement : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        // Вычисление относительной скорости столкновения
+        // Calculate relative velocity of the collision
         Vector2 relativeVelocity = collision.relativeVelocity;
 
-        // Сброс текущей скорости автобуса
+        // Reset the current speed of the bus
         _rigidbody2D.velocity = Vector2.zero;
         _rigidbody2D.angularVelocity = 0;
         _isBraking = false;
         _targetSpeed = 0;
 
-        // Применение силы для отталкивания автобуса
+        // Apply a force to push the bus back
         _rigidbody2D.AddForce(-relativeVelocity * _rigidbody2D.mass, ForceMode2D.Impulse);
     }
 }
