@@ -43,6 +43,11 @@ public class CarMovement : MonoBehaviour
         _turnDirection = 1; // Set turn direction to right
     }
 
+    public void TurnLeft()
+    {
+        _turnDirection = -1; // Set turn direction to left
+    }
+
     private void HandleMovement()
     {
         float currentSpeed = _rigidbody2D.velocity.magnitude;

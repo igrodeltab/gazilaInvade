@@ -5216,6 +5216,54 @@ MonoBehaviour:
   m_CropFrameX: 0
   m_CropFrameY: 0
   m_StretchFill: 0
+--- !u!1 &630096364
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 630096365}
+  - component: {fileID: 630096366}
+  m_Layer: 0
+  m_Name: LeftPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &630096365
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 630096364}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.5, y: 1.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6539253455588128571}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &630096366
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 630096364}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cec1dcede4ebe9149a8cf9f4cf6a8211, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _roadTilemap: {fileID: 968949898}
+  _frontCheckPoint: {fileID: 630096365}
+  _rectangleWidth: 2
+  _rectangleHeight: 1
 --- !u!1 &632329999
 GameObject:
   m_ObjectHideFlags: 0
@@ -34835,6 +34883,7 @@ Transform:
   m_Children:
   - {fileID: 1260484494381739859}
   - {fileID: 1681155312}
+  - {fileID: 630096365}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &7615327548093364371
@@ -34878,6 +34927,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _frontTileTriggerChecker: {fileID: 8818265735320118392}
   _rightTileTriggerChecker: {fileID: 1681155313}
+  _leftTileTriggerChecker: {fileID: 630096366}
   _carMovement: {fileID: 1230172188545950025}
 --- !u!1001 &8082740170819976000
 PrefabInstance:
