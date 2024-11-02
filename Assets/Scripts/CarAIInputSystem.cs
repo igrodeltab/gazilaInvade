@@ -7,25 +7,45 @@ public class CarAIInputSystem : MonoBehaviour
     [SerializeField] private TileTriggerChecker _leftTileTriggerChecker;  // Reference to left TileTriggerChecker
     [SerializeField] private CarMovement _carMovement; // Reference to CarMovement component
 
+    private enum TurnDirection { None, Right, Left }
+    private TurnDirection _currentTurnDirection = TurnDirection.None;
+
     private void Update()
     {
         // Check if there are fewer than 8 tiles in front
-        if (_frontTileTriggerChecker.TileCountInArea < 8)
+        if (_frontTileTriggerChecker.TileCountInArea < 6)
         {
-            // Compare right and left tile counts to determine the better turn direction
-            if (_rightTileTriggerChecker.TileCountInArea > _leftTileTriggerChecker.TileCountInArea)
+            // If no turn direction is set, determine the better turn direction
+            if (_currentTurnDirection == TurnDirection.None)
+            {
+                if (_rightTileTriggerChecker.TileCountInArea > _leftTileTriggerChecker.TileCountInArea)
+                {
+                    _currentTurnDirection = TurnDirection.Right;
+                }
+                else if (_leftTileTriggerChecker.TileCountInArea > _rightTileTriggerChecker.TileCountInArea)
+                {
+                    _currentTurnDirection = TurnDirection.Left;
+                }
+                else
+                {
+                    _currentTurnDirection = TurnDirection.Right; // Default turn
+                }
+            }
+
+            // Execute the current turn direction
+            if (_currentTurnDirection == TurnDirection.Right)
             {
                 _carMovement.TurnRight();
             }
-            else if (_leftTileTriggerChecker.TileCountInArea > _rightTileTriggerChecker.TileCountInArea)
+            else if (_currentTurnDirection == TurnDirection.Left)
             {
                 _carMovement.TurnLeft();
             }
-            else
-            {
-                // If both sides are equal or no tiles, choose a default turn
-                _carMovement.TurnRight(); // Default turn
-            }
+        }
+        else
+        {
+            // If there are 8 or more tiles in front, reset the turn direction
+            _currentTurnDirection = TurnDirection.None;
         }
 
         // Always move forward
