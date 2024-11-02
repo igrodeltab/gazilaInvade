@@ -9,29 +9,26 @@ public class CarAIInputSystem : MonoBehaviour
 
     private void Update()
     {
-        // Check the area for tiles and send commands
-        if (_frontTileTriggerChecker.TileCountInArea >= 2)
-        {
-            _carMovement.MoveForward(); // Command to move forward
-        }
-        else
+        // Check if there are fewer than 8 tiles in front
+        if (_frontTileTriggerChecker.TileCountInArea < 8)
         {
             // Compare right and left tile counts to determine the better turn direction
             if (_rightTileTriggerChecker.TileCountInArea > _leftTileTriggerChecker.TileCountInArea)
             {
-                _carMovement.MoveForward();
                 _carMovement.TurnRight();
             }
             else if (_leftTileTriggerChecker.TileCountInArea > _rightTileTriggerChecker.TileCountInArea)
             {
-                _carMovement.MoveForward();
                 _carMovement.TurnLeft();
             }
             else
             {
-                // If both sides are equal or no tiles, choose a default turn or stop
-                _carMovement.Stop(); // or _carMovement.TurnRight() if you prefer a default turn
+                // If both sides are equal or no tiles, choose a default turn
+                _carMovement.TurnRight(); // Default turn
             }
         }
+
+        // Always move forward
+        _carMovement.MoveForward();
     }
 }

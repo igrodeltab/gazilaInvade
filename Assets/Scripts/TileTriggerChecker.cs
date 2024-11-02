@@ -11,7 +11,7 @@ public class TileTriggerChecker : MonoBehaviour
 
     public int TileCountInArea { get; private set; } // Public count of tiles in the area
 
-    private List<Vector3> _tileCenters = new List<Vector3>(); // List of tile centers in the area
+    private List<Vector3> _tileCenters = new List<Vector3>(); // List of quarter points in the area
 
     private void Update()
     {
@@ -28,11 +28,30 @@ public class TileTriggerChecker : MonoBehaviour
             Vector3Int tilePosition = new Vector3Int(position.x, position.y, position.z);
             Vector3 tileCenter = _roadTilemap.GetCellCenterWorld(tilePosition);
 
-            // Check if the tile center is within the rectangle bounds
-            if (_roadTilemap.HasTile(tilePosition) && IsTileInRectangle(tileCenter, centerPoint))
+            if (_roadTilemap.HasTile(tilePosition))
             {
-                _tileCenters.Add(tileCenter);
-                TileCountInArea++;
+                // Calculate the positions of the 4 quarter points within the tile
+                float halfTileSizeX = _roadTilemap.cellSize.x / 2;
+                float halfTileSizeY = _roadTilemap.cellSize.y / 2;
+
+                // Calculate only the 4 quarter points
+                Vector3[] quarterPoints = new Vector3[]
+                {
+                    tileCenter + new Vector3(-halfTileSizeX / 2, -halfTileSizeY / 2, 0),
+                    tileCenter + new Vector3(halfTileSizeX / 2, -halfTileSizeY / 2, 0),
+                    tileCenter + new Vector3(-halfTileSizeX / 2, halfTileSizeY / 2, 0),
+                    tileCenter + new Vector3(halfTileSizeX / 2, halfTileSizeY / 2, 0)
+                };
+
+                // Check each quarter point and count it if within bounds
+                foreach (var point in quarterPoints)
+                {
+                    if (IsTileInRectangle(point, centerPoint))
+                    {
+                        _tileCenters.Add(point);
+                        TileCountInArea++;
+                    }
+                }
             }
         }
     }
@@ -64,11 +83,11 @@ public class TileTriggerChecker : MonoBehaviour
             Gizmos.DrawLine(bottomRight, bottomLeft);
             Gizmos.DrawLine(bottomLeft, topLeft);
 
+            // Draw quarter points inside the tiles
             Gizmos.color = Color.green;
-            // Draw spheres at the center of each tile inside the rectangle
             foreach (var tileCenter in _tileCenters)
             {
-                Gizmos.DrawSphere(tileCenter, 0.1f);
+                Gizmos.DrawSphere(tileCenter, 0.05f);
             }
         }
     }
