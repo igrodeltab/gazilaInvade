@@ -13,7 +13,7 @@ public class SceneViewTimeScaleController
     {
         Handles.BeginGUI();
 
-        GUILayout.BeginArea(new Rect(10, 10, 150, 200), "Time Control", GUI.skin.window);
+        GUILayout.BeginArea(new Rect(10, 10, 150, 250), "Time Control", GUI.skin.window);
 
         GUILayout.Label("Control Game Time Scale", EditorStyles.boldLabel);
 
@@ -50,6 +50,23 @@ public class SceneViewTimeScaleController
         {
             if (EditorApplication.isPaused)
             {
+                EditorApplication.Step();
+            }
+        }
+        if (GUILayout.Button("Step to 2 Next Frames"))
+        {
+            if (EditorApplication.isPaused)
+            {
+                EditorApplication.Step();
+                EditorApplication.Step();
+            }
+        }
+        if (GUILayout.Button("Step to 3 Next Frames"))
+        {
+            if (EditorApplication.isPaused)
+            {
+                EditorApplication.Step();
+                EditorApplication.Step();
                 EditorApplication.Step();
             }
         }
