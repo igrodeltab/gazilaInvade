@@ -89,6 +89,18 @@ public class TileTriggerChecker : MonoBehaviour
             {
                 Gizmos.DrawSphere(tileCenter, 0.05f);
             }
+
+            // Draw the TileCountInArea in the center of the rectangle with adjusted position
+            Gizmos.color = Color.white;
+            Vector3 centerPoint = _frontCheckPoint.position;
+            GUIStyle style = new GUIStyle
+            {
+                fontSize = 16, // Set the font size
+                normal = { textColor = Color.white }, // Set text color
+                alignment = TextAnchor.MiddleCenter // Center the text within the label
+            };
+
+            UnityEditor.Handles.Label(centerPoint, TileCountInArea.ToString(), style);
         }
     }
 }
