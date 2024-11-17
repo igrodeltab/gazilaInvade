@@ -9,6 +9,7 @@ public class SetPassengerTargetForWalking : MonoBehaviour
     private Tilemap walkableTilemap; // Reference to the Tilemap found by the tag
     private MovementToTargetByAxis movementComponent; // Passenger's movement component
     private Vector3 _currentTargetPosition; // Passenger's current target position
+    private Vector3 _lastPassengerPosition; // Позиция пассажира при выборе цели
 
     private void Start()
     {
@@ -45,29 +46,28 @@ public class SetPassengerTargetForWalking : MonoBehaviour
 
     private void AssignRandomTileTarget()
     {
+        _lastPassengerPosition = transform.position; // Сохраняем текущую позицию пассажира
+
         Vector3Int randomTilePosition = GetRandomWalkableTileWithinRadius();
 
         if (randomTilePosition != Vector3Int.zero) // Если найден подходящий тайл
         {
-            // Определяем конечную цель
             Vector3 finalTarget = walkableTilemap.CellToWorld(randomTilePosition) + walkableTilemap.cellSize / 2;
 
-            // Пробуем выбрать промежуточную цель
-            Vector3 intermediateTarget = Vector3.zero; // Задаём значение по умолчанию
+            Vector3 intermediateTarget = Vector3.zero;
             bool isIntermediateValid = false;
 
             for (int attempts = 0; attempts < 10; attempts++) // Максимум 10 попыток выбрать промежуточную цель
             {
-                if (Random.value > 0.5f) // Сначала двигаемся по X, затем по Y
+                if (Random.value > 0.5f)
                 {
                     intermediateTarget = new Vector3(finalTarget.x, transform.position.y, 0);
                 }
-                else // Сначала двигаемся по Y, затем по X
+                else
                 {
                     intermediateTarget = new Vector3(transform.position.x, finalTarget.y, 0);
                 }
 
-                // Проверяем, находится ли промежуточная цель на тайле и путь до неё валиден
                 Vector3Int intermediateTilePosition = walkableTilemap.WorldToCell(intermediateTarget);
 
                 if (IsWalkableTile(intermediateTilePosition) &&
@@ -80,7 +80,6 @@ public class SetPassengerTargetForWalking : MonoBehaviour
                 }
             }
 
-            // Если промежуточная цель найдена, назначаем обе цели
             if (isIntermediateValid)
             {
                 movementComponent.SetTargets(intermediateTarget, finalTarget);
@@ -158,10 +157,21 @@ public class SetPassengerTargetForWalking : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        // Отрисовка радиусов поиска целей
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, minTargetRadius); // Минимальный радиус
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawWireSphere(transform.position, maxTargetRadius); // Максимальный радиус
+        if (_lastPassengerPosition != Vector3.zero) // Если позиция пассажира сохранена
+        {
+            // Отрисовка радиусов поиска вокруг позиции пассажира при выборе цели
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(_lastPassengerPosition, minTargetRadius); // Минимальный радиус
+
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawWireSphere(_lastPassengerPosition, maxTargetRadius); // Максимальный радиус
+        }
+
+        // Отрисовка текущей цели, если есть
+        if (movementComponent != null && movementComponent.HasTarget)
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawSphere(_currentTargetPosition, 0.3f);
+        }
     }
 }
