@@ -125,22 +125,28 @@ public class SetPassengerTargetForWalking : MonoBehaviour
         Vector3Int passengerPosition = walkableTilemap.WorldToCell(transform.position);
         Vector3Int randomTilePosition = Vector3Int.zero;
 
-        // Try to find a random walkable tile
-        for (int i = 0; i < 100; i++) // Maximum of 100 attempts to find a suitable tile
+        for (int i = 0; i < 100; i++) // Максимум 100 попыток найти подходящий тайл
         {
             float randomRadius = Random.Range(minTargetRadius, maxTargetRadius);
-            Vector3 randomDirection = Random.insideUnitCircle * randomRadius;
-            Vector3Int targetTilePosition = walkableTilemap.WorldToCell(transform.position + new Vector3(randomDirection.x, randomDirection.y, 0));
+            Vector3 randomDirection = Random.insideUnitCircle.normalized * randomRadius; // Нормализуем вектор, чтобы учитывать только расстояние
+            Vector3 targetWorldPosition = transform.position + new Vector3(randomDirection.x, randomDirection.y, 0);
 
-            // Check if the tile is walkable
-            if (IsWalkableTile(targetTilePosition))
+            float distanceToTarget = Vector3.Distance(transform.position, targetWorldPosition);
+
+            // Проверяем, что точка находится в нужном диапазоне
+            if (distanceToTarget >= minTargetRadius && distanceToTarget <= maxTargetRadius)
             {
-                randomTilePosition = targetTilePosition;
-                break;
+                randomTilePosition = walkableTilemap.WorldToCell(targetWorldPosition);
+
+                // Проверяем, что тайл валиден
+                if (IsWalkableTile(randomTilePosition))
+                {
+                    return randomTilePosition;
+                }
             }
         }
 
-        return randomTilePosition;
+        return Vector3Int.zero; // Если ничего не найдено, возвращаем пустую точку
     }
 
     // Check if the tile is walkable

@@ -1991,6 +1991,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4661621898258989959, guid: bc54ee135f3a6b246996928afb69d7ea, type: 3}
+      propertyPath: maxTargetRadius
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4661621898258989959, guid: bc54ee135f3a6b246996928afb69d7ea, type: 3}
+      propertyPath: minTargetRadius
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
