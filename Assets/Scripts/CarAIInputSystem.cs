@@ -10,50 +10,79 @@ public class CarAIInputSystem : MonoBehaviour
 
     private enum TurnDirection { None, Right, Left }
     private TurnDirection _currentTurnDirection = TurnDirection.None;
+    private TurnDirection _lastTurnDirection = TurnDirection.Right; // Track last turn direction
 
     private void Update()
     {
-        // If there is something ahead, stop the car
+        // Get the number of tiles ahead, to the right, and to the left
+        int tilesAhead = _frontTileTriggerChecker.TileCountInArea;
+        int tilesRight = _rightTileTriggerChecker.TileCountInArea;
+        int tilesLeft = _leftTileTriggerChecker.TileCountInArea;
+
+        // If something is ahead, stop the car
         if (_forwardDetection.IsSomethingAhead)
         {
             _carMovement.Stop();
         }
         else
         {
-            // Check if there are fewer than 8 tiles in front
-            if (_frontTileTriggerChecker.TileCountInArea < 6)
+            // Check if there are fewer than 6 tiles in front
+            if (tilesAhead < 5)
             {
-                // If no turn direction is set, determine the better turn direction
+                // If no turn direction is set, decide the best turn direction
                 if (_currentTurnDirection == TurnDirection.None)
                 {
-                    if (_rightTileTriggerChecker.TileCountInArea > _leftTileTriggerChecker.TileCountInArea)
+                    if (tilesRight > tilesLeft)
                     {
                         _currentTurnDirection = TurnDirection.Right;
                     }
-                    else if (_leftTileTriggerChecker.TileCountInArea > _rightTileTriggerChecker.TileCountInArea)
+                    else if (tilesLeft > tilesRight)
                     {
-                        _currentTurnDirection = TurnDirection.Left;
+                        if (tilesRight < 3)
+                        {
+                            _currentTurnDirection = TurnDirection.Left;
+                        }
                     }
                     else
                     {
-                        _currentTurnDirection = TurnDirection.Right; // Default turn
+                        _carMovement.Stop();
                     }
-                }
-
-                // Execute the current turn direction
-                if (_currentTurnDirection == TurnDirection.Right)
-                {
-                    _carMovement.TurnRight();
-                }
-                else if (_currentTurnDirection == TurnDirection.Left)
-                {
-                    _carMovement.TurnLeft();
                 }
             }
             else
             {
-                // If there are 8 or more tiles in front, reset the turn direction
-                _currentTurnDirection = TurnDirection.None;
+                if (Mathf.Abs(tilesAhead - tilesRight) <= 1)
+                {
+                    // If tiles are equal, choose randomly between Right and Forward
+                    //_currentTurnDirection = (Random.value > 0.5f) ? TurnDirection.Right : TurnDirection.None;
+
+                    // Alternate between Right and Forward based on the last turn direction
+                    if (_lastTurnDirection == TurnDirection.Right)
+                    {
+                        _currentTurnDirection = TurnDirection.None; // Move Forward
+                        _lastTurnDirection = TurnDirection.None;
+                    }
+                    else if (_lastTurnDirection == TurnDirection.None)
+                    {
+                        _currentTurnDirection = TurnDirection.Right;
+                        _lastTurnDirection = TurnDirection.Right;
+                    }
+                }
+                else
+                {
+                    // If there are 6 or more tiles in front, reset the turn direction
+                    _currentTurnDirection = TurnDirection.None;
+                }
+            }
+
+            // Execute the current turn direction
+            if (_currentTurnDirection == TurnDirection.Right)
+            {
+                _carMovement.TurnRight();
+            }
+            else if (_currentTurnDirection == TurnDirection.Left)
+            {
+                _carMovement.TurnLeft();
             }
 
             // Move forward only if there is no obstacle
