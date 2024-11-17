@@ -45,8 +45,15 @@ public class PassengerMovement : MonoBehaviour
         // Проверяем, была ли уже установлена цель
         if (_isReadyToBoard && !_isTargetSet)
         {
-            _movementToTargetScript.SetTarget(targetTransform.position);
-            Debug.Log("MoveTowards called, setting target");
+            // Определяем промежуточную цель
+            Vector3 intermediateTarget = new Vector3(
+                targetTransform.position.x,
+                transform.position.y,
+                0); // Сначала двигаемся по X, затем к Y
+
+            // Устанавливаем цели в компонент движения
+            _movementToTargetScript.SetTargets(intermediateTarget, targetTransform.position);
+            Debug.Log("MoveTowards called, setting intermediate and final targets");
             _isTargetSet = true; // Цель установлена, больше не задаём её
         }
     }

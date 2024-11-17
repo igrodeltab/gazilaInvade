@@ -13,35 +13,38 @@ public class MovementToTargetByAxis : MonoBehaviour
 
     [SerializeField] private float _movementSpeed = 5f; // Скорость перемещения, настраиваемая в инспекторе
 
-    private Vector3 _targetPosition;
+    private Vector3 _intermediateTarget; // Промежуточная цель
+    private Vector3 _targetPosition; // Конечная цель
     private bool _hasTarget = false;
+    private bool _isIntermediateTargetReached = false; // Достигнута ли промежуточная цель
+    private bool _movingAlongX = true; // Двигаемся по оси X сначала
+    private bool _isTargetSet = false; // Установлены ли цели
+
     public bool HasTarget => _hasTarget; // Свойство только для чтения
-
-    private bool _movingAlongX = true;
-    private bool _isTargetSet = false; // Добавляем переменную для отслеживания, установлена ли цель
-
     public MovementState CurrentState { get; private set; } = MovementState.Idle;
 
-    // Метод для установки целевой позиции
-    public void SetTarget(Vector3 target)
+    // Установка промежуточной и конечной целей
+    public void SetTargets(Vector3 intermediateTarget, Vector3 finalTarget)
     {
-        _targetPosition = target;
-        _targetPosition.z = 0; // Убираем глубину, если работаем в 2D
+        _intermediateTarget = intermediateTarget;
+        _targetPosition = finalTarget;
+        _isIntermediateTargetReached = false; // Сбрасываем статус
         _hasTarget = true;
-        _isTargetSet = true; // Отмечаем, что цель установлена
+        _isTargetSet = true;
 
-        // Определяем, по какой оси будем двигаться сначала
-        _movingAlongX = Mathf.Abs(_targetPosition.x - transform.position.x) > Mathf.Abs(_targetPosition.y - transform.position.y);
+        // Начинаем с промежуточной цели
+        _movingAlongX = Mathf.Abs(_intermediateTarget.x - transform.position.x) > Mathf.Abs(_intermediateTarget.y - transform.position.y);
 
-        Debug.Log($"Target set to: {_targetPosition}");
+        Debug.Log($"Intermediate target set to: {_intermediateTarget}, final target set to: {_targetPosition}");
     }
 
-    // Метод для сброса цели
+    // Сброс цели
     public void ResetTarget()
     {
-        _hasTarget = false;  // Сбрасываем движение
-        _isTargetSet = false; // Устанавливаем, что цель больше не задана
-        CurrentState = MovementState.Idle; // Возвращаем в состояние ожидания
+        _hasTarget = false;
+        _isIntermediateTargetReached = false;
+        _isTargetSet = false;
+        CurrentState = MovementState.Idle;
         Debug.Log("Target reset, passenger is idle.");
     }
 
@@ -56,9 +59,8 @@ public class MovementToTargetByAxis : MonoBehaviour
             CurrentState = MovementState.Idle; // Если нет цели, стоим на месте
         }
 
-        // Дополнительная проверка для случаев, когда объект может остановиться раньше
-        // Добавляем проверку, что цель была установлена
-        if (!_hasTarget && _isTargetSet) // Проверка: цель должна быть установлена
+        // Проверка, если цель была установлена, но ещё не достигнута
+        if (!_hasTarget && _isTargetSet)
         {
             if (Mathf.Abs(transform.position.x - _targetPosition.x) > 0.01f || Mathf.Abs(transform.position.y - _targetPosition.y) > 0.01f)
             {
@@ -68,57 +70,124 @@ public class MovementToTargetByAxis : MonoBehaviour
         }
     }
 
-    // Метод для перемещения объекта к цели
+    // Метод для перемещения к цели
     private void MoveTowardsTarget()
     {
-        // Получаем текущие координаты объекта
+        // Проверяем, достигли ли промежуточной цели
+        if (!_isIntermediateTargetReached)
+        {
+            MoveTowards(_intermediateTarget);
+
+            if (HasReachedTarget(_intermediateTarget))
+            {
+                _isIntermediateTargetReached = true;
+                _movingAlongX = Mathf.Abs(_targetPosition.x - transform.position.x) > Mathf.Abs(_targetPosition.y - transform.position.y);
+                Debug.Log("Intermediate target reached, moving to final target.");
+            }
+        }
+        else
+        {
+            MoveTowards(_targetPosition);
+
+            if (HasReachedTarget(_targetPosition))
+            {
+                _hasTarget = false; // Конечная цель достигнута
+                Debug.Log("Final target reached.");
+            }
+        }
+    }
+
+    // Метод для перемещения к указанной цели
+    private void MoveTowards(Vector3 target)
+    {
         Vector3 currentPosition = transform.position;
 
         if (_movingAlongX)
         {
-            // Двигаемся по оси X с заданной скоростью
-            currentPosition.x = Mathf.MoveTowards(currentPosition.x, _targetPosition.x, Time.deltaTime * _movementSpeed);
+            // Движение по оси X
+            currentPosition.x = Mathf.MoveTowards(currentPosition.x, target.x, Time.deltaTime * _movementSpeed);
+            CurrentState = target.x > transform.position.x ? MovementState.MovingRight : MovementState.MovingLeft;
 
-            // Определяем направление движения по X
-            if (Mathf.Sign(_targetPosition.x - transform.position.x) > 0)
-            {
-                CurrentState = MovementState.MovingRight;
-            }
-            else if (Mathf.Sign(_targetPosition.x - transform.position.x) < 0)
-            {
-                CurrentState = MovementState.MovingLeft;
-            }
-
-            // Проверяем, достигли ли мы нужной позиции по X
-            if (Mathf.Abs(currentPosition.x - _targetPosition.x) < 0.01f)
+            if (Mathf.Abs(currentPosition.x - target.x) < 0.01f)
             {
                 _movingAlongX = false; // Переключаемся на ось Y
             }
         }
-
-        if (!_movingAlongX && _hasTarget)  // Если движение по X завершено
+        else
         {
-            // Двигаемся по оси Y с заданной скоростью
-            currentPosition.y = Mathf.MoveTowards(currentPosition.y, _targetPosition.y, Time.deltaTime * _movementSpeed);
+            // Движение по оси Y
+            currentPosition.y = Mathf.MoveTowards(currentPosition.y, target.y, Time.deltaTime * _movementSpeed);
+            CurrentState = target.y > transform.position.y ? MovementState.MovingUp : MovementState.MovingDown;
 
-            // Определяем направление движения по Y
-            if (Mathf.Sign(_targetPosition.y - transform.position.y) > 0)
+            if (Mathf.Abs(currentPosition.y - target.y) < 0.01f)
             {
-                CurrentState = MovementState.MovingUp;
-            }
-            else if (Mathf.Sign(_targetPosition.y - transform.position.y) < 0)
-            {
-                CurrentState = MovementState.MovingDown;
-            }
-
-            // Проверяем, достигли ли мы нужной позиции по Y
-            if (Mathf.Abs(currentPosition.y - _targetPosition.y) < 0.01f)
-            {
-                _hasTarget = false; // Движение завершено
+                _movingAlongX = true; // Переключаемся на ось X
             }
         }
 
-        // Обновляем позицию объекта
         transform.position = currentPosition;
+    }
+
+    // Проверка достижения цели
+    private bool HasReachedTarget(Vector3 target)
+    {
+        return Mathf.Abs(transform.position.x - target.x) < 0.01f && Mathf.Abs(transform.position.y - target.y) < 0.01f;
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (_hasTarget)
+        {
+            Vector3 passengerPosition = transform.position;
+
+            // Всегда отрисовываем конечную цель
+            Gizmos.color = Color.green;
+            Gizmos.DrawSphere(_targetPosition, 0.3f);
+
+            if (!_isIntermediateTargetReached)
+            {
+                // Отрисовка промежуточной цели (если она не достигнута)
+                Gizmos.color = Color.yellow;
+                Gizmos.DrawSphere(_intermediateTarget, 0.3f);
+
+                // Линия от текущей позиции до промежуточной цели (толстая)
+                for (int i = -1; i <= 1; i++)
+                {
+                    for (int j = -1; j <= 1; j++)
+                    {
+                        Gizmos.color = Color.red;
+                        Gizmos.DrawLine(
+                            passengerPosition + new Vector3(i * 0.05f, j * 0.05f, 0),
+                            _intermediateTarget + new Vector3(i * 0.05f, j * 0.05f, 0));
+                    }
+                }
+
+                // Линия от промежуточной до конечной цели (толстая)
+                for (int i = -1; i <= 1; i++)
+                {
+                    for (int j = -1; j <= 1; j++)
+                    {
+                        Gizmos.color = Color.blue;
+                        Gizmos.DrawLine(
+                            _intermediateTarget + new Vector3(i * 0.05f, j * 0.05f, 0),
+                            _targetPosition + new Vector3(i * 0.05f, j * 0.05f, 0));
+                    }
+                }
+            }
+            else
+            {
+                // Если промежуточная цель достигнута, рисуем линию от текущей позиции до конечной цели (толстая)
+                for (int i = -1; i <= 1; i++)
+                {
+                    for (int j = -1; j <= 1; j++)
+                    {
+                        Gizmos.color = Color.blue;
+                        Gizmos.DrawLine(
+                            passengerPosition + new Vector3(i * 0.05f, j * 0.05f, 0),
+                            _targetPosition + new Vector3(i * 0.05f, j * 0.05f, 0));
+                    }
+                }
+            }
+        }
     }
 }

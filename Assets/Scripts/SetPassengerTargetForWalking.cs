@@ -43,15 +43,31 @@ public class SetPassengerTargetForWalking : MonoBehaviour
         }
     }
 
-    // Method to assign a random target on a walkable tile within the radius
+    // Метод для назначения цели с промежуточной точкой
     private void AssignRandomTileTarget()
     {
         Vector3Int randomTilePosition = GetRandomWalkableTileWithinRadius();
-        if (randomTilePosition != Vector3Int.zero) // If a valid tile is found
+        if (randomTilePosition != Vector3Int.zero) // Если найден подходящий тайл
         {
-            _currentTargetPosition = walkableTilemap.CellToWorld(randomTilePosition) + walkableTilemap.cellSize / 2; // Center the target
-            movementComponent.SetTarget(_currentTargetPosition); // Set the target for the passenger
-            Debug.Log("New target assigned for the passenger: " + _currentTargetPosition);
+            // Конечная цель
+            Vector3 finalTarget = walkableTilemap.CellToWorld(randomTilePosition) + walkableTilemap.cellSize / 2;
+
+            // Промежуточная цель
+            Vector3 intermediateTarget;
+            Vector3 passengerPosition = transform.position;
+
+            if (Random.value > 0.5f) // Сначала двигаемся по X, затем по Y
+            {
+                intermediateTarget = new Vector3(finalTarget.x, passengerPosition.y, 0);
+            }
+            else // Сначала двигаемся по Y, затем по X
+            {
+                intermediateTarget = new Vector3(passengerPosition.x, finalTarget.y, 0);
+            }
+
+            // Передаём цели в компонент движения
+            movementComponent.SetTargets(intermediateTarget, finalTarget);
+            Debug.Log($"New intermediate target: {intermediateTarget}, final target: {finalTarget}");
         }
         else
         {
@@ -92,40 +108,10 @@ public class SetPassengerTargetForWalking : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        if (movementComponent != null && movementComponent.HasTarget)
-        {
-            // Draw a sphere at the target position
-            Gizmos.color = Color.green;
-            Gizmos.DrawSphere(_currentTargetPosition, 0.3f);
-
-            // Draw the path from the passenger to the target along the X and Y axes with thicker lines
-            Vector3 passengerPosition = transform.position;
-
-            // Increase line thickness for the Gizmos
-            Gizmos.color = Color.red;
-            Gizmos.DrawLine(passengerPosition, new Vector3(_currentTargetPosition.x, passengerPosition.y, 0));
-
-            Gizmos.color = Color.blue;
-            Gizmos.DrawLine(new Vector3(_currentTargetPosition.x, passengerPosition.y, 0), _currentTargetPosition);
-
-            // Draw thicker lines by repeating the draw line commands slightly offset to simulate thickness
-            for (int i = -1; i <= 1; i++)
-            {
-                for (int j = -1; j <= 1; j++)
-                {
-                    Gizmos.color = Color.red;
-                    Gizmos.DrawLine(passengerPosition + new Vector3(i * 0.05f, j * 0.05f, 0), new Vector3(_currentTargetPosition.x + i * 0.05f, passengerPosition.y + j * 0.05f, 0));
-
-                    Gizmos.color = Color.blue;
-                    Gizmos.DrawLine(new Vector3(_currentTargetPosition.x + i * 0.05f, passengerPosition.y + j * 0.05f, 0), _currentTargetPosition + new Vector3(i * 0.05f, j * 0.05f, 0));
-                }
-            }
-        }
-
-        // Draw the min and max target search radius
+        // Отрисовка радиусов поиска целей
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, minTargetRadius); // Draw the minimum radius
+        Gizmos.DrawWireSphere(transform.position, minTargetRadius); // Минимальный радиус
         Gizmos.color = Color.cyan;
-        Gizmos.DrawWireSphere(transform.position, maxTargetRadius); // Draw the maximum radius
+        Gizmos.DrawWireSphere(transform.position, maxTargetRadius); // Максимальный радиус
     }
 }
