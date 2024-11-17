@@ -67,10 +67,13 @@ public class SetPassengerTargetForWalking : MonoBehaviour
                     intermediateTarget = new Vector3(transform.position.x, finalTarget.y, 0);
                 }
 
-                // Проверяем, находится ли промежуточная цель на тайле
+                // Проверяем, находится ли промежуточная цель на тайле и путь до неё валиден
                 Vector3Int intermediateTilePosition = walkableTilemap.WorldToCell(intermediateTarget);
 
-                if (IsWalkableTile(intermediateTilePosition) && intermediateTarget != finalTarget)
+                if (IsWalkableTile(intermediateTilePosition) &&
+                    intermediateTarget != finalTarget &&
+                    IsPathValid(transform.position, intermediateTarget) &&
+                    IsPathValid(intermediateTarget, finalTarget))
                 {
                     isIntermediateValid = true;
                     break;
@@ -92,6 +95,28 @@ public class SetPassengerTargetForWalking : MonoBehaviour
         {
             Debug.LogError("Failed to find a suitable tile for the target.");
         }
+    }
+
+    // Проверка, что путь от start до end проходит только по тайлам
+    private bool IsPathValid(Vector3 start, Vector3 end)
+    {
+        Vector3 direction = (end - start).normalized;
+        float distance = Vector3.Distance(start, end);
+
+        // Проверяем каждую точку вдоль пути
+        for (float i = 0; i <= distance; i += walkableTilemap.cellSize.x / 2) // Шаг равен половине размера тайла
+        {
+            Vector3 point = start + direction * i;
+            Vector3Int tilePosition = walkableTilemap.WorldToCell(point);
+
+            if (!IsWalkableTile(tilePosition))
+            {
+                Debug.Log($"Path invalid at point {point}, not on a valid tile.");
+                return false;
+            }
+        }
+
+        return true;
     }
 
     // Method to search for a random walkable tile within the radius
