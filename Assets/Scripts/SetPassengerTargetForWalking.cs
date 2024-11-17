@@ -43,31 +43,50 @@ public class SetPassengerTargetForWalking : MonoBehaviour
         }
     }
 
-    // Метод для назначения цели с промежуточной точкой
     private void AssignRandomTileTarget()
     {
         Vector3Int randomTilePosition = GetRandomWalkableTileWithinRadius();
+
         if (randomTilePosition != Vector3Int.zero) // Если найден подходящий тайл
         {
-            // Конечная цель
+            // Определяем конечную цель
             Vector3 finalTarget = walkableTilemap.CellToWorld(randomTilePosition) + walkableTilemap.cellSize / 2;
 
-            // Промежуточная цель
-            Vector3 intermediateTarget;
-            Vector3 passengerPosition = transform.position;
+            // Пробуем выбрать промежуточную цель
+            Vector3 intermediateTarget = Vector3.zero; // Задаём значение по умолчанию
+            bool isIntermediateValid = false;
 
-            if (Random.value > 0.5f) // Сначала двигаемся по X, затем по Y
+            for (int attempts = 0; attempts < 10; attempts++) // Максимум 10 попыток выбрать промежуточную цель
             {
-                intermediateTarget = new Vector3(finalTarget.x, passengerPosition.y, 0);
-            }
-            else // Сначала двигаемся по Y, затем по X
-            {
-                intermediateTarget = new Vector3(passengerPosition.x, finalTarget.y, 0);
+                if (Random.value > 0.5f) // Сначала двигаемся по X, затем по Y
+                {
+                    intermediateTarget = new Vector3(finalTarget.x, transform.position.y, 0);
+                }
+                else // Сначала двигаемся по Y, затем по X
+                {
+                    intermediateTarget = new Vector3(transform.position.x, finalTarget.y, 0);
+                }
+
+                // Проверяем, находится ли промежуточная цель на тайле
+                Vector3Int intermediateTilePosition = walkableTilemap.WorldToCell(intermediateTarget);
+
+                if (IsWalkableTile(intermediateTilePosition) && intermediateTarget != finalTarget)
+                {
+                    isIntermediateValid = true;
+                    break;
+                }
             }
 
-            // Передаём цели в компонент движения
-            movementComponent.SetTargets(intermediateTarget, finalTarget);
-            Debug.Log($"New intermediate target: {intermediateTarget}, final target: {finalTarget}");
+            // Если промежуточная цель найдена, назначаем обе цели
+            if (isIntermediateValid)
+            {
+                movementComponent.SetTargets(intermediateTarget, finalTarget);
+                Debug.Log($"New intermediate target: {intermediateTarget}, final target: {finalTarget}");
+            }
+            else
+            {
+                Debug.LogError("Failed to assign a valid intermediate target.");
+            }
         }
         else
         {
