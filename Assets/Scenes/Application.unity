@@ -43943,7 +43943,7 @@ Transform:
   m_GameObject: {fileID: 2775915157373964173}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 86.5, y: -17, z: 1}
+  m_LocalPosition: {x: 79.48, y: -24.02, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -43999,11 +43999,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1be202fb7fe025e4c9344661c0c51596, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _frontTileTriggerChecker: {fileID: 8818265735320118392}
-  _rightTileTriggerChecker: {fileID: 1681155313}
-  _leftTileTriggerChecker: {fileID: 630096366}
+  _check01: {fileID: 555047490}
+  _check02: {fileID: 690996904}
+  _check03: {fileID: 1305936877}
+  _check04: {fileID: 1349217086}
+  _check05: {fileID: 1646536049}
+  _check06: {fileID: 266172473}
   _carMovement: {fileID: 1230172188545950025}
-  _forwardDetection: {fileID: 1237488131}
+  _roadTilemap: {fileID: 968949898}
+  _rectangleWidth: 0.6
+  _rectangleHeight: 1.55
 --- !u!114 &7846124969213463878
 MonoBehaviour:
   m_ObjectHideFlags: 0

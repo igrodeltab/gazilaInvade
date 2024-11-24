@@ -1,92 +1,136 @@
 ﻿using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class CarAIInputSystem : MonoBehaviour
 {
-    [SerializeField] private TileTriggerChecker _frontTileTriggerChecker; // Reference to front TileTriggerChecker
-    [SerializeField] private TileTriggerChecker _rightTileTriggerChecker; // Reference to right TileTriggerChecker
-    [SerializeField] private TileTriggerChecker _leftTileTriggerChecker;  // Reference to left TileTriggerChecker
-    [SerializeField] private CarMovement _carMovement; // Reference to CarMovement component
-    [SerializeField] private ForwardDetection _forwardDetection; // Reference to ForwardDetection component
+    [SerializeField] private TileCenterChecker _check01; // Tile center checker 1
+    [SerializeField] private TileCenterChecker _check02; // Tile center checker 2
+    [SerializeField] private TileCenterChecker _check03; // Tile center checker 3
+    [SerializeField] private TileCenterChecker _check04; // Tile center checker 4
+    [SerializeField] private TileCenterChecker _check05; // Tile center checker 5
+    [SerializeField] private TileCenterChecker _check06; // Tile center checker 6
+    [SerializeField] private CarMovement _carMovement;    // Reference to CarMovement component
+    [SerializeField] private Tilemap _roadTilemap;        // Reference to the road Tilemap
 
-    private enum TurnDirection { None, Right, Left }
-    private TurnDirection _currentTurnDirection = TurnDirection.None;
-    private TurnDirection _lastTurnDirection = TurnDirection.Right; // Track last turn direction
+    [SerializeField] private float _rectangleWidth = 2f;  // Width of the car detection rectangle
+    [SerializeField] private float _rectangleHeight = 3f; // Height of the car detection rectangle
+
+    private enum CarState
+    {
+        Forward,
+        Right,
+        Left
+    }
+
+    private CarState _currentState = CarState.Forward; // Default state
+    private float _targetRotation = 0f;               // Target rotation in degrees
+
+    private Vector3Int _currentTile;                  // Current tile position
+
+    private void Start()
+    {
+        // Initialize the current tile
+        _currentTile = GetTilePosition(transform.position);
+        SetState(); // Set initial state
+    }
 
     private void Update()
     {
-        // Get the number of tiles ahead, to the right, and to the left
-        int tilesAhead = _frontTileTriggerChecker.TileCountInArea;
-        int tilesRight = _rightTileTriggerChecker.TileCountInArea;
-        int tilesLeft = _leftTileTriggerChecker.TileCountInArea;
+        // Always move forward
+        _carMovement.MoveForward();
 
-        // If something is ahead, stop the car
-        if (_forwardDetection.IsSomethingAhead)
+        // Handle state-specific logic
+        if (_currentState == CarState.Forward)
         {
-            _carMovement.Stop();
+            // Check if the car entered a new tile
+            Vector3Int newTile = GetTilePosition(transform.position);
+            if (newTile != _currentTile)
+            {
+                _currentTile = newTile;
+                SetState(); // Recalculate state
+            }
         }
-        else
+        else if (_currentState == CarState.Right || _currentState == CarState.Left)
         {
-            // Check if there are fewer than 6 tiles in front
-            if (tilesAhead < 5)
+            // Check if the rotation matches the target
+            if (Mathf.Abs(Mathf.DeltaAngle(transform.eulerAngles.z, _targetRotation)) < 0.1f)
             {
-                // If no turn direction is set, decide the best turn direction
-                if (_currentTurnDirection == TurnDirection.None)
-                {
-                    if (tilesRight > tilesLeft)
-                    {
-                        _currentTurnDirection = TurnDirection.Right;
-                    }
-                    else if (tilesLeft > tilesRight)
-                    {
-                        if (tilesRight < 3)
-                        {
-                            _currentTurnDirection = TurnDirection.Left;
-                        }
-                    }
-                    else
-                    {
-                        _carMovement.Stop();
-                    }
-                }
+                SetState();
             }
-            else
-            {
-                if (Mathf.Abs(tilesAhead - tilesRight) <= 1)
-                {
-                    // If tiles are equal, choose randomly between Right and Forward
-                    //_currentTurnDirection = (Random.value > 0.5f) ? TurnDirection.Right : TurnDirection.None;
+        }
 
-                    // Alternate between Right and Forward based on the last turn direction
-                    if (_lastTurnDirection == TurnDirection.Right)
-                    {
-                        _currentTurnDirection = TurnDirection.None; // Move Forward
-                        _lastTurnDirection = TurnDirection.None;
-                    }
-                    else if (_lastTurnDirection == TurnDirection.None)
-                    {
-                        _currentTurnDirection = TurnDirection.Right;
-                        _lastTurnDirection = TurnDirection.Right;
-                    }
-                }
-                else
-                {
-                    // If there are 6 or more tiles in front, reset the turn direction
-                    _currentTurnDirection = TurnDirection.None;
-                }
-            }
-
-            // Execute the current turn direction
-            if (_currentTurnDirection == TurnDirection.Right)
-            {
+        switch (_currentState)
+        {
+            case CarState.Forward:
+                _targetRotation = 0f;
+                break;
+            case CarState.Right:
                 _carMovement.TurnRight();
-            }
-            else if (_currentTurnDirection == TurnDirection.Left)
-            {
+                _targetRotation = -90f;
+                break;
+            case CarState.Left:
                 _carMovement.TurnLeft();
-            }
-
-            // Move forward only if there is no obstacle
-            _carMovement.MoveForward();
+                _targetRotation = 90f;
+                break;
         }
+    }
+
+    /// <summary>
+    /// Sets the current state based on road checks.
+    /// </summary>
+    public void SetState()
+    {
+        // Update state based on new conditions
+        if (_check01.IsRoad && _check02.IsRoad)
+        {
+            _currentState = CarState.Forward;
+        }
+        
+        if (_check05.IsRoad && !_check06.IsRoad)
+        {
+            _currentState = CarState.Right;
+        }
+        
+        if (!_check01.IsRoad && !_check02.IsRoad && !_check05.IsRoad && !_check06.IsRoad && _check03.IsRoad && _check04.IsRoad)
+        {
+            _currentState = CarState.Left;
+        }
+    }
+
+    /// <summary>
+    /// Gets the tile position from the world position.
+    /// </summary>
+    private Vector3Int GetTilePosition(Vector3 worldPosition)
+    {
+        return _roadTilemap.WorldToCell(worldPosition);
+    }
+
+    private void OnDrawGizmos()
+    {
+        // Apply local-to-world transformation for correct rotation
+        Gizmos.matrix = transform.localToWorldMatrix;
+
+        // Define rectangle size
+        Vector3 rectangleCenter = Vector3.zero; // Center in local space
+        Vector3 rectangleSize = new Vector3(_rectangleWidth, _rectangleHeight, 0);
+
+        // Draw the rectangle in local space
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireCube(rectangleCenter, rectangleSize);
+
+        // Reset Gizmos matrix
+        Gizmos.matrix = Matrix4x4.identity;
+
+#if UNITY_EDITOR
+        // Draw state name in the center of the object
+        GUIStyle style = new GUIStyle
+        {
+            fontSize = 16,
+            normal = { textColor = Color.white },
+            alignment = TextAnchor.MiddleCenter
+        };
+
+        UnityEditor.Handles.Label(transform.position, _currentState.ToString(), style);
+#endif
     }
 }

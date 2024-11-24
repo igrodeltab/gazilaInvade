@@ -46,18 +46,22 @@ public class TileCenterChecker : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        // Define the rectangle's center and dimensions
-        Vector3 center = transform.position;
+        Gizmos.matrix = transform.localToWorldMatrix; // Apply local-to-world transformation
+
+        // Define the rectangle's center and dimensions in local space
+        Vector3 center = Vector3.zero; // Local center is at the origin
         Vector3 size = new Vector3(FixedRectangleWidth, FixedRectangleHeight, 0);
 
         // Set the Gizmos color based on IsRoad
         Gizmos.color = IsRoad ? new Color(0, 1, 0, 0.3f) : new Color(1, 0, 0, 0.3f);
 
-        // Draw a filled rectangle
+        // Draw a filled rectangle in local space
         Gizmos.DrawCube(center, size);
 
-        // Draw the outline of the rectangle
+        // Draw the outline of the rectangle in local space
         Gizmos.color = IsRoad ? Color.green : Color.red;
         Gizmos.DrawWireCube(center, size);
+
+        Gizmos.matrix = Matrix4x4.identity; // Reset Gizmos matrix to default
     }
 }
