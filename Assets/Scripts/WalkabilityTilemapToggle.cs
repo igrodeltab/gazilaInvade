@@ -17,8 +17,7 @@ public class WalkabilityTilemapToggle : MonoBehaviour
             return;
         }
 
-        // Отключаем рендерер при старте
-        _walkabilityTilemapRenderer.enabled = false;
+        _walkabilityTilemapRenderer.enabled = true;
     }
 
     private void Update()
