@@ -111,7 +111,7 @@ public class CarAIInputSystem : MonoBehaviour
         }
 
         // Устанавливаем целевые углы с учётом текущего угла машины
-        float currentAngle = transform.eulerAngles.z;
+        float currentAngle = RoundToNearest90(transform.eulerAngles.z);
 
         switch (_currentState)
         {
@@ -126,6 +126,12 @@ public class CarAIInputSystem : MonoBehaviour
                 break;
         }
     }
+
+    private float RoundToNearest90(float angle)
+    {
+        return Mathf.Round(angle / 90f) * 90f;
+    }
+
 
     private Vector3Int GetTilePosition(Vector3 worldPosition)
     {
