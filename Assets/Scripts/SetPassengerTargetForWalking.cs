@@ -83,16 +83,16 @@ public class SetPassengerTargetForWalking : MonoBehaviour
             if (isIntermediateValid)
             {
                 movementComponent.SetTargets(intermediateTarget, finalTarget);
-                Debug.Log($"New intermediate target: {intermediateTarget}, final target: {finalTarget}");
+                //Debug.Log($"New intermediate target: {intermediateTarget}, final target: {finalTarget}");
             }
             else
             {
-                Debug.LogError("Failed to assign a valid intermediate target.");
+                //Debug.LogError("Failed to assign a valid intermediate target.");
             }
         }
         else
         {
-            Debug.LogError("Failed to find a suitable tile for the target.");
+            //Debug.LogError("Failed to find a suitable tile for the target.");
         }
     }
 
