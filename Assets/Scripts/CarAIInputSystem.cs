@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.Tilemaps;
+using System.Collections.Generic; // Для работы с List<>
 
 public class CarAIInputSystem : MonoBehaviour
 {
@@ -40,25 +41,66 @@ public class CarAIInputSystem : MonoBehaviour
         _carMovement.MoveForward();
 
         // Handle state-specific logic
-        if (_currentState == CarState.Forward)
+        switch (_currentState)
         {
-            // Check if the car entered a new tile
-            Vector3Int newTile = GetTilePosition(transform.position);
-            if (newTile != _currentTile)
-            {
-                _currentTile = newTile;
-                SetState(); // Recalculate state
-            }
+            case CarState.Forward:
+                _targetRotation = 0f;
+                Vector3Int newTile = GetTilePosition(transform.position);
+                if (newTile != _currentTile)
+                {
+                    _currentTile = newTile;
+                    SetState();
+                }
+                break;
+
+            case CarState.Right:
+                _carMovement.TurnRight();
+                if (transform.eulerAngles.z >= _targetRotation)
+                {
+                    SetState();
+                }
+                break;
+
+            case CarState.Left:
+                _carMovement.TurnLeft();
+                if (transform.eulerAngles.z <= _targetRotation)
+                {
+                    SetState();
+                }
+                break;
         }
-        else if (_currentState == CarState.Right || _currentState == CarState.Left)
+    }
+
+    public void SetState()
+    {
+        // Список возможных стейтов
+        List<CarState> possibleStates = new List<CarState>();
+
+        // Проверка условий и добавление подходящих стейтов в список
+        if (_check01.IsRoad && _check02.IsRoad)
         {
-            // Check if the rotation matches the target
-            if (Mathf.Abs(Mathf.DeltaAngle(transform.eulerAngles.z, _targetRotation)) < 0.1f)
-            {
-                SetState();
-            }
+            possibleStates.Add(CarState.Forward);
+        }
+        if (_check05.IsRoad && !_check06.IsRoad)
+        {
+            possibleStates.Add(CarState.Right);
+        }
+        if (!_check01.IsRoad && !_check02.IsRoad && !_check05.IsRoad && !_check06.IsRoad && _check03.IsRoad && _check04.IsRoad)
+        {
+            possibleStates.Add(CarState.Left);
         }
 
+        // Если есть несколько подходящих стейтов, выбираем случайный
+        if (possibleStates.Count > 0)
+        {
+            _currentState = possibleStates[Random.Range(0, possibleStates.Count)];
+        }
+        else
+        {
+            _currentState = CarState.Forward; // По умолчанию
+        }
+
+        // Выполнение действий для выбранного стейта
         switch (_currentState)
         {
             case CarState.Forward:
@@ -75,31 +117,6 @@ public class CarAIInputSystem : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Sets the current state based on road checks.
-    /// </summary>
-    public void SetState()
-    {
-        // Update state based on new conditions
-        if (_check01.IsRoad && _check02.IsRoad)
-        {
-            _currentState = CarState.Forward;
-        }
-        
-        if (_check05.IsRoad && !_check06.IsRoad)
-        {
-            _currentState = CarState.Right;
-        }
-        
-        if (!_check01.IsRoad && !_check02.IsRoad && !_check05.IsRoad && !_check06.IsRoad && _check03.IsRoad && _check04.IsRoad)
-        {
-            _currentState = CarState.Left;
-        }
-    }
-
-    /// <summary>
-    /// Gets the tile position from the world position.
-    /// </summary>
     private Vector3Int GetTilePosition(Vector3 worldPosition)
     {
         return _roadTilemap.WorldToCell(worldPosition);
@@ -121,7 +138,6 @@ public class CarAIInputSystem : MonoBehaviour
         // Reset Gizmos matrix
         Gizmos.matrix = Matrix4x4.identity;
 
-#if UNITY_EDITOR
         // Draw state name in the center of the object
         GUIStyle style = new GUIStyle
         {
@@ -130,6 +146,7 @@ public class CarAIInputSystem : MonoBehaviour
             alignment = TextAnchor.MiddleCenter
         };
 
+#if UNITY_EDITOR
         UnityEditor.Handles.Label(transform.position, _currentState.ToString(), style);
 #endif
     }
