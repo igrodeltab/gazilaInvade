@@ -44326,7 +44326,7 @@ MonoBehaviour:
   _accelerationRate: 1
   _decelerationRate: 2
   _maxSpeed: 3
-  _turnSpeed: 100
+  _turnSpeed: 125
 --- !u!4 &1260484494381739859
 Transform:
   m_ObjectHideFlags: 0
@@ -44499,6 +44499,7 @@ MonoBehaviour:
   _roadTilemap: {fileID: 968949898}
   _rectangleWidth: 0.6
   _rectangleHeight: 1.55
+  _tolerance: 1
 --- !u!114 &7846124969213463878
 MonoBehaviour:
   m_ObjectHideFlags: 0

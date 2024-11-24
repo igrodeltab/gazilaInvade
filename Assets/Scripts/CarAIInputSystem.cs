@@ -16,6 +16,8 @@ public class CarAIInputSystem : MonoBehaviour
     [SerializeField] private float _rectangleWidth = 2f;  // Width of the car detection rectangle
     [SerializeField] private float _rectangleHeight = 3f; // Height of the car detection rectangle
 
+    [SerializeField] private float _tolerance = 3f;       // Допустимая погрешность угла
+
     private enum CarState
     {
         Forward,
@@ -25,7 +27,6 @@ public class CarAIInputSystem : MonoBehaviour
 
     private CarState _currentState = CarState.Forward; // Default state
     private float _targetRotation = 0f;               // Target rotation in degrees
-
     private Vector3Int _currentTile;                  // Current tile position
 
     private void Start()
@@ -40,38 +41,47 @@ public class CarAIInputSystem : MonoBehaviour
         // Always move forward
         _carMovement.MoveForward();
 
-        // Handle state-specific logic
+        // Текущий угол машины
+        float currentAngle = transform.eulerAngles.z;
+
+        // Обработка текущего состояния
         switch (_currentState)
         {
             case CarState.Forward:
                 _targetRotation = 0f;
+
+                // Проверка входа в новый тайл
                 Vector3Int newTile = GetTilePosition(transform.position);
                 if (newTile != _currentTile)
                 {
                     _currentTile = newTile;
-                    SetState();
+                    SetState(); // Обновляем состояние
                 }
                 break;
 
             case CarState.Right:
                 _carMovement.TurnRight();
-                if (transform.eulerAngles.z >= _targetRotation)
+
+                // Проверяем, достиг ли угол целевого значения
+                if (Mathf.Abs(Mathf.DeltaAngle(currentAngle, _targetRotation)) < _tolerance)
                 {
-                    SetState();
+                    SetState(); // Угол достигнут
                 }
                 break;
 
             case CarState.Left:
                 _carMovement.TurnLeft();
-                if (transform.eulerAngles.z <= _targetRotation)
+
+                // Проверяем, достиг ли угол целевого значения
+                if (Mathf.Abs(Mathf.DeltaAngle(currentAngle, _targetRotation)) < _tolerance)
                 {
-                    SetState();
+                    SetState(); // Угол достигнут
                 }
                 break;
         }
     }
 
-    public void SetState()
+    private void SetState()
     {
         // Список возможных стейтов
         List<CarState> possibleStates = new List<CarState>();
@@ -100,19 +110,19 @@ public class CarAIInputSystem : MonoBehaviour
             _currentState = CarState.Forward; // По умолчанию
         }
 
-        // Выполнение действий для выбранного стейта
+        // Устанавливаем целевые углы с учётом текущего угла машины
+        float currentAngle = transform.eulerAngles.z;
+
         switch (_currentState)
         {
             case CarState.Forward:
-                _targetRotation = 0f;
+                _targetRotation = currentAngle; // Движение вперёд без изменения угла
                 break;
             case CarState.Right:
-                _carMovement.TurnRight();
-                _targetRotation = -90f;
+                _targetRotation = Mathf.Repeat(currentAngle - 90f, 360f); // Направо
                 break;
             case CarState.Left:
-                _carMovement.TurnLeft();
-                _targetRotation = 90f;
+                _targetRotation = Mathf.Repeat(currentAngle + 90f, 360f); // Налево
                 break;
         }
     }
@@ -138,7 +148,11 @@ public class CarAIInputSystem : MonoBehaviour
         // Reset Gizmos matrix
         Gizmos.matrix = Matrix4x4.identity;
 
-        // Draw state name in the center of the object
+        // Текущий угол машины
+        float currentAngle = transform.eulerAngles.z;
+
+        // Draw state name, current angle, and target angle in the center of the object
+#if UNITY_EDITOR
         GUIStyle style = new GUIStyle
         {
             fontSize = 16,
@@ -146,8 +160,11 @@ public class CarAIInputSystem : MonoBehaviour
             alignment = TextAnchor.MiddleCenter
         };
 
-#if UNITY_EDITOR
-        UnityEditor.Handles.Label(transform.position, _currentState.ToString(), style);
+        string label = $"State: {_currentState}\n" +
+                       $"Current Angle: {currentAngle:F1}°\n" +
+                       $"Target: {_targetRotation:F1}°";
+
+        UnityEditor.Handles.Label(transform.position, label, style);
 #endif
     }
 }
