@@ -12942,7 +12942,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _roadTilemap: {fileID: 968949898}
   _carPrefab: {fileID: 2924700672703636481, guid: 194f3c6bc4aa6cd49827687d13ef8f8b, type: 3}
-  _spawnPoint: {fileID: 1286660947}
 --- !u!1001 &1573501671
 PrefabInstance:
   m_ObjectHideFlags: 0

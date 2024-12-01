@@ -361,7 +361,7 @@ MonoBehaviour:
   _roadTilemap: {fileID: 0}
   _rectangleWidth: 0.6
   _rectangleHeight: 1.55
-  _tolerance: 2
+  _tolerance: 1
 --- !u!114 &500301524773814372
 MonoBehaviour:
   m_ObjectHideFlags: 0
