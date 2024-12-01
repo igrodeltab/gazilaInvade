@@ -2241,7 +2241,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c10b872125c18104b97df01b0c6b8fa6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _roadTilemap: {fileID: 968949898}
+  _roadTilemap: {fileID: 0}
 --- !u!1001 &297345123
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7908,7 +7908,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c10b872125c18104b97df01b0c6b8fa6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _roadTilemap: {fileID: 968949898}
+  _roadTilemap: {fileID: 0}
 --- !u!1 &630096364
 GameObject:
   m_ObjectHideFlags: 0
@@ -8265,7 +8265,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c10b872125c18104b97df01b0c6b8fa6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _roadTilemap: {fileID: 968949898}
+  _roadTilemap: {fileID: 0}
 --- !u!1001 &701989457
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12676,7 +12676,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c10b872125c18104b97df01b0c6b8fa6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _roadTilemap: {fileID: 968949898}
+  _roadTilemap: {fileID: 0}
 --- !u!1 &1332567209 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1715255240352282337, guid: 735a18e7d55f1d140b939d51fd46ade6, type: 3}
@@ -12726,7 +12726,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c10b872125c18104b97df01b0c6b8fa6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _roadTilemap: {fileID: 968949898}
+  _roadTilemap: {fileID: 0}
 --- !u!1001 &1361707267
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13364,7 +13364,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c10b872125c18104b97df01b0c6b8fa6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _roadTilemap: {fileID: 968949898}
+  _roadTilemap: {fileID: 0}
 --- !u!1 &1672060441
 GameObject:
   m_ObjectHideFlags: 0
@@ -44414,6 +44414,7 @@ GameObject:
   - component: {fileID: 6539253455588128571}
   - component: {fileID: 713670387687369797}
   - component: {fileID: 7615327548093364371}
+  - component: {fileID: 7846124969213463879}
   - component: {fileID: 1230172188545950025}
   - component: {fileID: 7846124969213463877}
   - component: {fileID: 7846124969213463878}
@@ -44496,7 +44497,7 @@ MonoBehaviour:
   _check05: {fileID: 1646536049}
   _check06: {fileID: 266172473}
   _carMovement: {fileID: 1230172188545950025}
-  _roadTilemap: {fileID: 968949898}
+  _roadTilemap: {fileID: 0}
   _rectangleWidth: 0.6
   _rectangleHeight: 1.55
   _tolerance: 1
@@ -44514,6 +44515,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   offset: {x: 0.1, y: -0.1, z: 0}
   childObject: {fileID: 911739533}
+--- !u!114 &7846124969213463879
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2775915157373964173}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 958ef13cb4274b24aa4bc4b35c0eaebf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _roadTilemap: {fileID: 968949898}
 --- !u!1001 &8082740170819976000
 PrefabInstance:
   m_ObjectHideFlags: 0

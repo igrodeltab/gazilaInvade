@@ -31,6 +31,17 @@ public class CarAIInputSystem : MonoBehaviour
 
     private void Start()
     {
+        // Ищем TilemapProvider на текущем или родительском объекте
+        TilemapProvider provider = GetComponent<TilemapProvider>();
+        if (provider != null)
+        {
+            _roadTilemap = provider.RoadTilemap;
+        }
+        else
+        {
+            Debug.LogError("TilemapProvider not found on the GameObject or its parents!");
+        }
+
         // Initialize the current tile
         _currentTile = GetTilePosition(transform.position);
         SetState(); // Set initial state

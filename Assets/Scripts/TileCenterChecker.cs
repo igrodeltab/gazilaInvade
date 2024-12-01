@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public class TileCenterChecker : MonoBehaviour
@@ -10,9 +10,33 @@ public class TileCenterChecker : MonoBehaviour
     private const float FixedRectangleWidth = 1.0f; // Fixed width of the rectangle
     private const float FixedRectangleHeight = 1.0f; // Fixed height of the rectangle
 
+    private void Start()
+    {
+        // Ищем TilemapProvider у родительского объекта
+        TilemapProvider provider = GetComponentInParent<TilemapProvider>();
+        if (provider != null)
+        {
+            _roadTilemap = provider.RoadTilemap; // Получаем ссылку на Tilemap
+            if (_roadTilemap == null)
+            {
+                Debug.LogError("TilemapProvider найден, но ссылка на RoadTilemap не задана!");
+            }
+        }
+        else
+        {
+            Debug.LogError("TilemapProvider не найден у родителя " + transform.parent.name);
+        }
+    }
+
     private void Update()
     {
         IsRoad = false;
+
+        if (_roadTilemap == null)
+        {
+            Debug.LogError("Tilemap не назначен. Проверьте TilemapProvider.");
+            return;
+        }
 
         // Get the center point of the rectangle from the transform position
         Vector3 centerPoint = transform.position;
