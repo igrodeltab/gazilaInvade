@@ -3,13 +3,13 @@ using UnityEngine.Tilemaps;
 
 public class WalkabilityTilemapToggle : MonoBehaviour
 {
-    private TilemapRenderer _walkabilityTilemapRenderer; // Ссылка на TilemapRenderer, который будет включаться/выключаться
-    [SerializeField] private KeyCode _toggleKey = KeyCode.I; // Горячая клавиша для включения/отключения, по умолчанию I
-    [SerializeField] private bool _defaultState = true; // Значение по умолчанию: включено (true) или выключено (false)
+    private TilemapRenderer _walkabilityTilemapRenderer; // Reference to the TilemapRenderer to enable/disable
+    [SerializeField] private KeyCode _toggleKey = KeyCode.I; // Hotkey for toggling, default is 'I'
+    [SerializeField] private bool _defaultState = true; // Default state: enabled (true) or disabled (false)
 
     private void Awake()
     {
-        // Автоматически получаем компонент TilemapRenderer
+        // Automatically retrieve the TilemapRenderer component
         _walkabilityTilemapRenderer = GetComponent<TilemapRenderer>();
 
         if (_walkabilityTilemapRenderer == null)
@@ -18,16 +18,16 @@ public class WalkabilityTilemapToggle : MonoBehaviour
             return;
         }
 
-        // Устанавливаем начальное состояние рендерера
+        // Set the initial state of the renderer
         _walkabilityTilemapRenderer.enabled = _defaultState;
     }
 
     private void Update()
     {
-        // Проверяем, нажата ли горячая клавиша
+        // Check if the hotkey is pressed
         if (Input.GetKeyDown(_toggleKey))
         {
-            // Переключаем активность рендерера
+            // Toggle the renderer's enabled state
             _walkabilityTilemapRenderer.enabled = !_walkabilityTilemapRenderer.enabled;
         }
     }
