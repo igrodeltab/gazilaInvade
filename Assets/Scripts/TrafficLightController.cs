@@ -21,7 +21,7 @@ public class TrafficLightController : MonoBehaviour
     private LightState _currentState;
 
     private float _stateTimer;
-    private int _direction = 1; // Направление (1 - вперед, -1 - назад)
+    private int _direction = 1; // Направление смены (1 - вперед, -1 - назад)
 
     private SpriteRenderer[] _lights;
 
@@ -36,7 +36,7 @@ public class TrafficLightController : MonoBehaviour
             return;
         }
 
-        // Устанавливаем начальное состояние
+        // Инициализация начального состояния
         InitializeState();
     }
 
@@ -49,7 +49,7 @@ public class TrafficLightController : MonoBehaviour
 
         if (_stateTimer <= 0)
         {
-            // Меняем состояние
+            // Смена состояния
             ChangeState();
         }
     }
@@ -57,21 +57,7 @@ public class TrafficLightController : MonoBehaviour
     private void InitializeState()
     {
         _currentState = _defaultState;
-        switch (_currentState)
-        {
-            case LightState.Green:
-                UpdateLights(_greenState);
-                _stateTimer = _greenState.Duration;
-                break;
-            case LightState.Yellow:
-                UpdateLights(_yellowState);
-                _stateTimer = _yellowState.Duration;
-                break;
-            case LightState.Red:
-                UpdateLights(_redState);
-                _stateTimer = _redState.Duration;
-                break;
-        }
+        SetState(GetTrafficLightState(_currentState));
     }
 
     private void ChangeState()
@@ -80,28 +66,54 @@ public class TrafficLightController : MonoBehaviour
         {
             case LightState.Green:
                 _currentState = LightState.Yellow;
-                UpdateLights(_yellowState);
-                _stateTimer = _yellowState.Duration;
+                SetState(_yellowState);
                 break;
+
             case LightState.Yellow:
-                _currentState = _direction == 1 ? LightState.Red : LightState.Green;
-                UpdateLights(_currentState == LightState.Red ? _redState : _greenState);
-                _stateTimer = _currentState == LightState.Red ? _redState.Duration : _greenState.Duration;
+                if (_direction == 1)
+                {
+                    _currentState = LightState.Red;
+                    SetState(_redState);
+                }
+                else
+                {
+                    _currentState = LightState.Green;
+                    SetState(_greenState);
+                }
                 break;
+
             case LightState.Red:
                 _currentState = LightState.Yellow;
-                UpdateLights(_yellowState);
-                _stateTimer = _yellowState.Duration;
-                _direction = -1; // Меняем направление
+                SetState(_yellowState);
+                _direction = -1; // Меняем направление после красного света
                 break;
+        }
+
+        // Если вернулись к зеленому свету, меняем направление на вперед
+        if (_currentState == LightState.Green)
+        {
+            _direction = 1;
         }
     }
 
-    private void UpdateLights(TrafficLightState state)
+    private void SetState(TrafficLightState state)
     {
         foreach (var light in _lights)
         {
             light.sprite = state.Sprite;
+        }
+
+        _stateTimer = state.Duration;
+    }
+
+    private TrafficLightState GetTrafficLightState(LightState state)
+    {
+        switch (state)
+        {
+            case LightState.Green: return _greenState;
+            case LightState.Yellow: return _yellowState;
+            case LightState.Red: return _redState;
+            default: return null;
         }
     }
 }
