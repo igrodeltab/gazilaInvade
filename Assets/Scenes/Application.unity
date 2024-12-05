@@ -13059,6 +13059,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2353031567071557210, guid: 34897f333c18f2a4e87466289aa0d30e, type: 3}
+      propertyPath: _defaultState
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 4391761478095112376, guid: 34897f333c18f2a4e87466289aa0d30e, type: 3}
       propertyPath: m_Name
       value: CrossRoad (1)

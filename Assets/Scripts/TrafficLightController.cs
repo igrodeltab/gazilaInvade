@@ -15,9 +15,10 @@ public class TrafficLightController : MonoBehaviour
     [SerializeField] private TrafficLightState _greenState;
     [SerializeField] private TrafficLightState _yellowState;
     [SerializeField] private TrafficLightState _redState;
+    [SerializeField] private LightState _defaultState = LightState.Green; // Значение по умолчанию
 
     private enum LightState { Green, Yellow, Red }
-    private LightState _currentState = LightState.Green;
+    private LightState _currentState;
 
     private float _stateTimer;
     private int _direction = 1; // Направление (1 - вперед, -1 - назад)
@@ -36,8 +37,7 @@ public class TrafficLightController : MonoBehaviour
         }
 
         // Устанавливаем начальное состояние
-        UpdateLights(_greenState);
-        _stateTimer = _greenState.Duration;
+        InitializeState();
     }
 
     private void Update()
@@ -51,6 +51,26 @@ public class TrafficLightController : MonoBehaviour
         {
             // Меняем состояние
             ChangeState();
+        }
+    }
+
+    private void InitializeState()
+    {
+        _currentState = _defaultState;
+        switch (_currentState)
+        {
+            case LightState.Green:
+                UpdateLights(_greenState);
+                _stateTimer = _greenState.Duration;
+                break;
+            case LightState.Yellow:
+                UpdateLights(_yellowState);
+                _stateTimer = _yellowState.Duration;
+                break;
+            case LightState.Red:
+                UpdateLights(_redState);
+                _stateTimer = _redState.Duration;
+                break;
         }
     }
 
