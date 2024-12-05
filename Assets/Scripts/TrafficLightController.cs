@@ -5,8 +5,8 @@ public class TrafficLightController : MonoBehaviour
     [System.Serializable]
     private class TrafficLightState
     {
-        [SerializeField] private Sprite _sprite;  // Спрайт для состояния
-        [SerializeField] private float _duration; // Длительность состояния
+        [SerializeField] private Sprite _sprite;  // Sprite for the state
+        [SerializeField] private float _duration; // Duration of the state
 
         public Sprite Sprite => _sprite;
         public float Duration => _duration;
@@ -15,19 +15,19 @@ public class TrafficLightController : MonoBehaviour
     [SerializeField] private TrafficLightState _greenState;
     [SerializeField] private TrafficLightState _yellowState;
     [SerializeField] private TrafficLightState _redState;
-    [SerializeField] private LightState _defaultState = LightState.Green; // Значение по умолчанию
+    [SerializeField] private LightState _defaultState = LightState.Green; // Default initial state
 
     private enum LightState { Green, Yellow, Red }
     private LightState _currentState;
 
     private float _stateTimer;
-    private int _direction = 1; // Направление смены (1 - вперед, -1 - назад)
+    private int _direction = 1; // Direction of the cycle (1 - forward, -1 - backward)
 
     private SpriteRenderer[] _lights;
 
     private void Start()
     {
-        // Получаем все дочерние объекты со спрайтами
+        // Get all child objects with SpriteRenderer components
         _lights = GetComponentsInChildren<SpriteRenderer>();
 
         if (_lights.Length == 0)
@@ -36,7 +36,7 @@ public class TrafficLightController : MonoBehaviour
             return;
         }
 
-        // Инициализация начального состояния
+        // Initialize the starting state
         InitializeState();
     }
 
@@ -44,12 +44,12 @@ public class TrafficLightController : MonoBehaviour
     {
         if (_lights.Length == 0) return;
 
-        // Обновляем таймер
+        // Update the timer
         _stateTimer -= Time.deltaTime;
 
         if (_stateTimer <= 0)
         {
-            // Смена состояния
+            // Change the traffic light state
             ChangeState();
         }
     }
@@ -85,11 +85,11 @@ public class TrafficLightController : MonoBehaviour
             case LightState.Red:
                 _currentState = LightState.Yellow;
                 SetState(_yellowState);
-                _direction = -1; // Меняем направление после красного света
+                _direction = -1; // Change direction after the red light
                 break;
         }
 
-        // Если вернулись к зеленому свету, меняем направление на вперед
+        // Reset direction to forward when returning to green light
         if (_currentState == LightState.Green)
         {
             _direction = 1;
