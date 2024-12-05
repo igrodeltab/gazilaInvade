@@ -5,6 +5,7 @@ public class WalkabilityTilemapToggle : MonoBehaviour
 {
     private TilemapRenderer _walkabilityTilemapRenderer; // Ссылка на TilemapRenderer, который будет включаться/выключаться
     [SerializeField] private KeyCode _toggleKey = KeyCode.I; // Горячая клавиша для включения/отключения, по умолчанию I
+    [SerializeField] private bool _defaultState = true; // Значение по умолчанию: включено (true) или выключено (false)
 
     private void Awake()
     {
@@ -17,7 +18,8 @@ public class WalkabilityTilemapToggle : MonoBehaviour
             return;
         }
 
-        _walkabilityTilemapRenderer.enabled = true;
+        // Устанавливаем начальное состояние рендерера
+        _walkabilityTilemapRenderer.enabled = _defaultState;
     }
 
     private void Update()

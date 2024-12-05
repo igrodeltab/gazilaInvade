@@ -6168,6 +6168,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _toggleKey: 105
+  _defaultState: 0
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -6897,16 +6898,16 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 968949896}
+  - component: {fileID: 968949899}
   - component: {fileID: 968949898}
   - component: {fileID: 968949897}
-  - component: {fileID: 968949899}
   m_Layer: 0
   m_Name: RoadTilemap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &968949896
 Transform:
   m_ObjectHideFlags: 0
@@ -9984,6 +9985,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _toggleKey: 111
+  _defaultState: 0
 --- !u!1001 &969708653
 PrefabInstance:
   m_ObjectHideFlags: 0
