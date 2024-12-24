@@ -10827,6 +10827,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1241605536}
     - target: {fileID: 1872578728932277039, guid: 34228af712dbda946a36b927684a319b, type: 3}
+      propertyPath: _direction
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1872578728932277039, guid: 34228af712dbda946a36b927684a319b, type: 3}
+      propertyPath: _followSpeed
+      value: -3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1872578728932277039, guid: 34228af712dbda946a36b927684a319b, type: 3}
       propertyPath: _startPosition
       value: 0.7599999904632568
       objectReference: {fileID: 0}
@@ -11558,6 +11566,22 @@ PrefabInstance:
     - target: {fileID: 4391761478095112376, guid: 34897f333c18f2a4e87466289aa0d30e, type: 3}
       propertyPath: m_Name
       value: CrossRoad (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5343964123863381809, guid: 34897f333c18f2a4e87466289aa0d30e, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6285349549470297807, guid: 34897f333c18f2a4e87466289aa0d30e, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7608770175836022753, guid: 34897f333c18f2a4e87466289aa0d30e, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8675572234022989095, guid: 34897f333c18f2a4e87466289aa0d30e, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

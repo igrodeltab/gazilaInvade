@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using Dreamteck.Splines;
 
 public class CarSplineFollowerDetection : MonoBehaviour
@@ -9,6 +9,8 @@ public class CarSplineFollowerDetection : MonoBehaviour
     [SerializeField] private float _accelerationRate = 1f;
     [SerializeField] private float _decelerationRate = 2f;
 
+    private bool _isForward = true;
+
     private void Awake()
     {
         if (_follower == null)
@@ -17,7 +19,19 @@ public class CarSplineFollowerDetection : MonoBehaviour
             if (_follower == null)
             {
                 Debug.LogError("SplineFollower not found on the object.");
+                return;
             }
+        }
+
+        // Проверяем направление движения
+        _isForward = _follower.direction == Spline.Direction.Forward;
+
+        // Если направление обратное, изменяем знаки
+        if (!_isForward)
+        {
+            _maxFollowSpeed = -_maxFollowSpeed;
+            _accelerationRate = -_accelerationRate;
+            _decelerationRate = -_decelerationRate;
         }
     }
 
@@ -35,17 +49,17 @@ public class CarSplineFollowerDetection : MonoBehaviour
 
     private void StopSmoothly()
     {
-        if (_follower != null && _follower.followSpeed > 0)
+        if (_follower != null && Mathf.Abs(_follower.followSpeed) > 0)
         {
-            _follower.followSpeed = Mathf.Max(0, _follower.followSpeed - _decelerationRate * Time.deltaTime);
+            _follower.followSpeed = Mathf.MoveTowards(_follower.followSpeed, 0, Mathf.Abs(_decelerationRate) * Time.deltaTime);
         }
     }
 
     private void MoveSmoothly()
     {
-        if (_follower != null && _follower.followSpeed < _maxFollowSpeed)
+        if (_follower != null && Mathf.Abs(_follower.followSpeed) < Mathf.Abs(_maxFollowSpeed))
         {
-            _follower.followSpeed = Mathf.Min(_maxFollowSpeed, _follower.followSpeed + _accelerationRate * Time.deltaTime);
+            _follower.followSpeed = Mathf.MoveTowards(_follower.followSpeed, _maxFollowSpeed, Mathf.Abs(_accelerationRate) * Time.deltaTime);
         }
     }
 }
