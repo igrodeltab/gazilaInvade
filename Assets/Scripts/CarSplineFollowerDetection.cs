@@ -26,12 +26,16 @@ public class CarSplineFollowerDetection : MonoBehaviour
         // Проверяем направление движения
         _isForward = _follower.direction == Spline.Direction.Forward;
 
-        // Если направление обратное, изменяем знаки
+        // Если направление обратное, изменяем знаки и разворачиваем объект
         if (!_isForward)
         {
             _maxFollowSpeed = -_maxFollowSpeed;
             _accelerationRate = -_accelerationRate;
             _decelerationRate = -_decelerationRate;
+
+            // Разворачиваем объект
+            Vector3 currentScale = transform.localScale;
+            transform.localScale = new Vector3(-currentScale.x, currentScale.y, currentScale.z);
         }
     }
 

@@ -6569,7 +6569,7 @@ GameObject:
   - component: {fileID: 656498225}
   - component: {fileID: 656498224}
   m_Layer: 0
-  m_Name: Spline 2
+  m_Name: SplineForward
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10309,7 +10309,7 @@ GameObject:
   - component: {fileID: 1241605537}
   - component: {fileID: 1241605536}
   m_Layer: 0
-  m_Name: Spline 1
+  m_Name: SplineBackward
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
