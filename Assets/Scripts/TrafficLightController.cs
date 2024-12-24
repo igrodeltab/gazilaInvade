@@ -17,6 +17,11 @@ public class TrafficLightController : MonoBehaviour
     [SerializeField] private TrafficLightState _redState;
     [SerializeField] private LightState _defaultState = LightState.Green; // Default initial state
 
+    [SerializeField] private Collider2D _greenCollider1;
+    [SerializeField] private Collider2D _greenCollider2;
+    [SerializeField] private Collider2D _redCollider1;
+    [SerializeField] private Collider2D _redCollider2;
+
     private enum LightState { Green, Yellow, Red }
     private LightState _currentState;
 
@@ -104,6 +109,13 @@ public class TrafficLightController : MonoBehaviour
         }
 
         _stateTimer = state.Duration;
+
+        // Enable/disable colliders based on the state
+        bool isGreen = state == _greenState;
+        _greenCollider1.enabled = isGreen;
+        _greenCollider2.enabled = isGreen;
+        _redCollider1.enabled = !isGreen;
+        _redCollider2.enabled = !isGreen;
     }
 
     private TrafficLightState GetTrafficLightState(LightState state)
