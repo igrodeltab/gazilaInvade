@@ -10883,6 +10883,10 @@ PrefabInstance:
       value: 0.80571824
       objectReference: {fileID: 0}
     - target: {fileID: 1872578728932277039, guid: 34228af712dbda946a36b927684a319b, type: 3}
+      propertyPath: _motion._rotationOffset.z
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 1872578728932277039, guid: 34228af712dbda946a36b927684a319b, type: 3}
       propertyPath: _clipFromSample.position.x
       value: 78.83704
       objectReference: {fileID: 0}
@@ -10904,19 +10908,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3933636245294446834, guid: 34228af712dbda946a36b927684a319b, type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.64514244
+      value: -0.7640625
       objectReference: {fileID: 0}
     - target: {fileID: 3933636245294446834, guid: 34228af712dbda946a36b927684a319b, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 3933636245294446834, guid: 34228af712dbda946a36b927684a319b, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 3933636245294446834, guid: 34228af712dbda946a36b927684a319b, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.7640623
+      value: -0.6451422
       objectReference: {fileID: 0}
     - target: {fileID: 3933636245294446834, guid: 34228af712dbda946a36b927684a319b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
